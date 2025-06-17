@@ -29,8 +29,14 @@ Route::get('/donations/getbyname/{name}', [DonationController::class, 'getByName
 Route::apiResource('donations', DonationController::class)->except([
     'create',
     'edit'
-]);
+])->middleware('jwt.auth');
 
 Route::get('/donations/users/{id}', [DonationController::class, 'getByUser']);
 
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::patch('/donations/activeupdate/{id}', [DonationController::class, 'activeUpdate'])->middleware('jwt.auth');
+
+Route::patch('/donations/pendingupdate/{id}', [DonationController::class, 'pendingUpdate'])->middleware('jwt.auth');
+
+Route::patch('/donations/disableupdate/{id}', [DonationController::class, 'disableUpdate'])->middleware('jwt.auth');

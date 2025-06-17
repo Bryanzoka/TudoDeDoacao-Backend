@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use App\Enums\DonationStatus;
 use App\Models\Donation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DonationRequests\DonationRequest;
@@ -122,6 +123,33 @@ class DonationController extends Controller
         }
 
         return DonationResource::collection($donations);
+    }
+
+    public function activeUpdate($id)
+    {
+        $donation = Donation::find($id);
+        $donation->donation_status = DonationStatus::Active;
+        $donation->save();
+
+        return new DonationResource($donation);
+    }
+
+    public function pendingUpdate($id)
+    {
+        $donation = Donation::find($id);
+        $donation->donation_status = DonationStatus::Pending;
+        $donation->save();
+
+        return new DonationResource($donation);
+    }
+
+    public function disableUpdate($id)
+    {
+        $donation = Donation::find($id);
+        $donation->donation_status = DonationStatus::Disable;
+        $donation->save();
+
+        return new DonationResource($donation);
     }
 
     public function destroy(Donation $donation)
