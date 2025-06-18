@@ -8,6 +8,7 @@ use App\Http\Requests\UserRequests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -20,7 +21,9 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $user = User::create($request->validated());
-        return new UserResource($user);
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json(['token' => $token, 'user' => new UserResource($user)], 201);
     }
 
     public function show(User $user)
