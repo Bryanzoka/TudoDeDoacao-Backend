@@ -35,6 +35,8 @@ Route::get('/donations/users/{id}', [DonationController::class, 'getByUser']);
 
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
+
 Route::patch('/donations/activeupdate/{id}', [DonationController::class, 'activeUpdate'])->middleware('jwt.auth');
 
 Route::patch('/donations/pendingupdate/{id}', [DonationController::class, 'pendingUpdate'])->middleware('jwt.auth');
