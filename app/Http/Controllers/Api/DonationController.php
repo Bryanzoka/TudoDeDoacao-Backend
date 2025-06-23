@@ -24,9 +24,11 @@ class DonationController extends Controller
     public function store(DonationRequest $request)
     {
         $data = $request->validated();
+
         if ($request->hasFile('donation_image')) {
             $data['donation_image'] = $request->file('donation_image')->store('donations', 'public');
         }
+        
         $donation = Donation::create($data);
         $donation->donation_filteredName = strtolower(str::ascii($donation->donation_name));
         $donation->save();
@@ -40,10 +42,15 @@ class DonationController extends Controller
 
     public function update(DonationUpdateRequest $request, Donation $donation)
     {
+        if (auth()->id() != $donation->user_id) {
+            return response()->json(['message' => 'operação inválida, credenciais não correspondentes'], 401);
+        }
+
         //Inserir _method = PATCH nas requisições POST de form-data para atualizar a imagem e seus outros atributos
         $validatedData = $request->validated();
+        $donation->fill($validatedData);
 
-        if ($validatedData->hasFile('donation_image')) {
+        if ($request->hasFile('donation_image')) {
             if ($donation->donation_image && Storage::disk('public')->exists($donation->donation_image)) {
                 Storage::disk('public')->delete($donation->donation_image);
             }
@@ -51,6 +58,7 @@ class DonationController extends Controller
             $path = $request->file('donation_image')->store('donations', 'public');
             $donation->donation_image = $path;
         }
+
         $donation->save();
 
         return new DonationResource($donation);
@@ -154,6 +162,10 @@ class DonationController extends Controller
 
     public function destroy(Donation $donation)
     {
+        if (auth()->id() != $donation->user_id) {
+            return response()->json(['message' => 'operação inválida, credenciais não correspondentes'], 401);
+        }
+
         if ($donation->donation_image && Storage::disk('public')->exists($donation->donation_image)) {
             Storage::disk('public')->delete($donation->donation_image);
         }
