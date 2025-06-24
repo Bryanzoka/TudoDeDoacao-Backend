@@ -25,10 +25,12 @@ class DonationController extends Controller
     {
         $data = $request->validated();
 
+        $data['user_id'] = auth()->id();
+
         if ($request->hasFile('donation_image')) {
             $data['donation_image'] = $request->file('donation_image')->store('donations', 'public');
         }
-        
+
         $donation = Donation::create($data);
         $donation->donation_filteredName = strtolower(str::ascii($donation->donation_name));
         $donation->save();
@@ -132,34 +134,7 @@ class DonationController extends Controller
 
         return DonationResource::collection($donations);
     }
-
-    public function activeUpdate($id)
-    {
-        $donation = Donation::find($id);
-        $donation->donation_status = DonationStatus::Active;
-        $donation->save();
-
-        return new DonationResource($donation);
-    }
-
-    public function pendingUpdate($id)
-    {
-        $donation = Donation::find($id);
-        $donation->donation_status = DonationStatus::Pending;
-        $donation->save();
-
-        return new DonationResource($donation);
-    }
-
-    public function disableUpdate($id)
-    {
-        $donation = Donation::find($id);
-        $donation->donation_status = DonationStatus::Disable;
-        $donation->save();
-
-        return new DonationResource($donation);
-    }
-
+    
     public function destroy(Donation $donation)
     {
         if (auth()->id() != $donation->user_id) {

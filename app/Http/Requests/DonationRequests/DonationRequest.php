@@ -24,9 +24,9 @@ class DonationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'exists:users,id'],
             'donation_name' => ['required', 'string', 'min:2', 'max:70'],
             'donation_description' => ['nullable', 'string', 'max:255'],
+            'donation_briefDescription' => ['nullable', 'string', 'max:70'],
             'donation_category' => ['nullable', 'max:50'],
             'donation_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], 
             'donation_location' => ['required', 'string', 'max:100'],

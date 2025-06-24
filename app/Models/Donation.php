@@ -16,6 +16,7 @@ class Donation extends Model
         'donation_name',
         'donation_filteredName',
         'donation_description',
+        'donation_briefDescription',
         'donation_category',
         'donation_image',
         'donation_location',
