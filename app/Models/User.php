@@ -29,6 +29,11 @@ class User extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
+    public function favoriteDonations()
+    {
+        return $this->belongsToMany(Donation::class, 'favorites')->withTimestamps();
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

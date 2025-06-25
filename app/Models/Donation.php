@@ -22,4 +22,9 @@ class Donation extends Model
         'donation_location',
         'donation_status',
     ];
+
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
+    }
 }

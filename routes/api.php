@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\AuthController;
@@ -26,6 +27,8 @@ Route::get('/donations/getbycategory/{category}', [DonationController::class, 'g
 
 Route::get('/donations/getbyname/{name}', [DonationController::class, 'getByName']);
 
+Route::get('/donations/favorites', [FavoriteController::class, 'myFavorites'])->middleware('jwt.auth');
+
 Route::apiResource('donations', DonationController::class)->except([
     'create',
     'edit'
@@ -37,8 +40,6 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
 
-Route::patch('/donations/activeupdate/{id}', [DonationController::class, 'activeUpdate'])->middleware('jwt.auth');
+Route::post('/donations/favorites/{donation}', [FavoriteController::class, 'favorite'])->middleware('jwt.auth');
 
-Route::patch('/donations/pendingupdate/{id}', [DonationController::class, 'pendingUpdate'])->middleware('jwt.auth');
-
-Route::patch('/donations/disableupdate/{id}', [DonationController::class, 'disableUpdate'])->middleware('jwt.auth');
+Route::delete('/donations/favorites/{donation}', [FavoriteController::class, 'unfavorite'])->middleware('jwt.auth');
