@@ -45,10 +45,10 @@ class DonationController extends Controller
     public function update(DonationUpdateRequest $request, Donation $donation)
     {
         if (auth()->id() != $donation->user_id) {
-            return response()->json(['message' => 'operação inválida, credenciais não correspondentes'], 401);
+            return response()->json(['message' => 'invalid operation, mismatched credentials'], 401);
         }
 
-        //Inserir _method = PATCH nas requisições POST de form-data para atualizar a imagem e seus outros atributos
+        //Insert _method = PATCH in form-data POST requests to update the image and its other attributes
         $validatedData = $request->validated();
         $donation->fill($validatedData);
 
@@ -71,7 +71,7 @@ class DonationController extends Controller
         $donations = Donation::where('user_id', '=', $id)->get();
 
         if ($donations->isEmpty()) {
-            return response()->json(['message' => 'Nenhuma doação encontrada'], 404);
+            return response()->json(['message' => 'no donations found'], 404);
         }
 
         return DonationResource::collection($donations);
@@ -83,7 +83,7 @@ class DonationController extends Controller
         $donations = Donation::where('donation_filteredName', 'like', '%' . strtolower($firstWord) . '%')->get();
 
         if ($donations->isEmpty()) {
-            return response()->json(['message' => 'Nenhuma doação encontrada com este nome']);
+            return response()->json(['message' => 'no donations found with this name']);
         }
 
         return DonationResource::collection($donations);
@@ -94,7 +94,7 @@ class DonationController extends Controller
         $donations = Donation::where('donation_category', '=', $category)->get();
 
         if ($donations->isEmpty()) {
-            return response()->json(['message'=> 'Nenhuma doação encontrada para essa categoria'],404);
+            return response()->json(['message'=> 'no donations found with this category'],404);
         }
 
         return DonationResource::collection($donations);
@@ -105,7 +105,7 @@ class DonationController extends Controller
         $donations = Donation::where('donation_location', '=', $location)->get();
 
         if ($donations->isEmpty()) {
-            return response()->json(['message'=> 'Nenhuma doação encontrada para a sua localização'],404);
+            return response()->json(['message'=> 'no donations found for this location'],404);
         }
 
         return DonationResource::collection($donations);
@@ -117,7 +117,7 @@ class DonationController extends Controller
         $donations = Donation::where('donation_location', '=', $user->location)->where('user_id', '!=', $user->id)->get();
 
         if ($donations->isEmpty()) {
-            return response()->json(['message'=> 'Nenhuma doação disponível na sua localização'],404);
+            return response()->json(['message'=> 'no donations found for your location'],404);
         }
 
         return DonationResource::collection($donations);
@@ -129,7 +129,7 @@ class DonationController extends Controller
         $donations = Donation::where('user_id', '=', $user->id)->get();
 
         if ($donations->isEmpty()) {
-            return response()->json(['message' => 'Nenhuma doação encontrada'], 404);
+            return response()->json(['message' => 'no donation found'], 404);
         }
 
         return DonationResource::collection($donations);
@@ -138,7 +138,7 @@ class DonationController extends Controller
     public function destroy(Donation $donation)
     {
         if (auth()->id() != $donation->user_id) {
-            return response()->json(['message' => 'operação inválida, credenciais não correspondentes'], 401);
+            return response()->json(['message' => 'invalid operation, mismatched credentials'], 401);
         }
 
         if ($donation->donation_image && Storage::disk('public')->exists($donation->donation_image)) {

@@ -34,7 +34,7 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, User $user)
     {
         if (auth()->id() != $user->id) {
-            return response()->json(['message' => 'operação inválida, login não correspondente'], 401);
+            return response()->json(['message' => 'invalid operation, login not matching'], 401);
         }
 
         $user->update($request->validated());
@@ -44,7 +44,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         if (auth()->id() != $user->id) {
-            return response()->json(['message' => 'operação inválida, login não correspondente'], 401);
+            return response()->json(['message' => 'invalid operation, login not matching'], 401);
         }
 
         $user->delete();

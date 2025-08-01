@@ -14,7 +14,7 @@ class FavoriteController extends Controller
         $user = auth()->user();
 
         if ($user->favoriteDonations()->where('donation_id', $donation->id)->exists()) {
-            return response()->json(['message' => 'Doação já atribuída aos favoritos'], 409);
+            return response()->json(['message' => 'donation already assigned to favorites'], 409);
         }
 
         $user->favoriteDonations()->attach($donation->id);
@@ -30,7 +30,7 @@ class FavoriteController extends Controller
             $user->favoriteDonations()->detach($donation->id);
         }
         else {
-            return response()->json(['message' => 'Doação não atribuída aos seus favoritos', 404]);
+            return response()->json(['message' => 'donation not assigned to your favorites', 404]);
         }
 
         return response()->json(null, 204);
