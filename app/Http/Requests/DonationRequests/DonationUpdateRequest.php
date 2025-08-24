@@ -24,13 +24,12 @@ class DonationUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'donation_name' => ['sometimes', 'string', 'min:2', 'max:70'],
-            'donation_description' => ['sometimes', 'string', 'max:255'],
-            'donation_briefDescription'=> ['sometimes', 'string','max:70'],
-            'donation_category' => ['sometimes', 'max:50'],
-            'donation_image' => ['sometimes', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], 
-            'donation_location' => ['sometimes', 'string', 'max:100'],
-            'donation_status' => ['sometimes', new Enum(DonationStatus::class)]
+            'name' => ['sometimes', 'string', 'min:2', 'max:70'],
+            'description' => ['sometimes', 'string', 'max:255'],
+            'category' => ['sometimes', 'max:50'],
+            'image' => ['sometimes', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], 
+            'location' => ['sometimes', 'string', 'max:100'],
+            'status' => ['sometimes', new Enum(DonationStatus::class)]
         ];
     }
 }

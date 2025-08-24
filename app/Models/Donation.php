@@ -13,14 +13,14 @@ class Donation extends Model
 
     protected $fillable = [
         'user_id',
-        'donation_name',
-        'donation_filteredName',
-        'donation_description',
-        'donation_briefDescription',
-        'donation_category',
-        'donation_image',
-        'donation_location',
-        'donation_status',
+        'name',
+        'search_name',
+        'description',
+        'brief_description',
+        'category',
+        'image',
+        'location',
+        'status',
     ];
 
     public function favoritedByUsers()

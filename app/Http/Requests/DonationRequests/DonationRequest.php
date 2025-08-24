@@ -24,13 +24,12 @@ class DonationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'donation_name' => ['required', 'string', 'min:2', 'max:70'],
-            'donation_description' => ['nullable', 'string', 'max:255'],
-            'donation_briefDescription' => ['nullable', 'string', 'max:70'],
-            'donation_category' => ['nullable', 'max:50'],
-            'donation_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], 
-            'donation_location' => ['required', 'string', 'max:100'],
-            'donation_status' => ['nullable', new Enum(DonationStatus::class)]
+            'name' => ['required', 'string', 'min:2', 'max:70'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'category' => ['nullable', 'max:50'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], 
+            'location' => ['required', 'string', 'max:100'],
+            'status' => ['nullable', new Enum(DonationStatus::class)]
         ];
     }
 }

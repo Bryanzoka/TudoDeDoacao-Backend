@@ -15,10 +15,34 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone')->unique();
+            $table->string('location');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+        });
+
+        Schema::create('donations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->string('search_name')->nullable();
+            $table->text('description')->nullable();
+            $table->text('brief_description')->nullable();
+            $table->string('category');
+            $table->string('image')->nullable();
+            $table->string('location');
+            $table->enum('status', ['active', 'pending', 'disable'])->default('active');
+            $table->timestamps();
+        });
+
+        Schema::create('favorites', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('donation_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+            $table->unique(['user_id','donation_id']);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -43,6 +67,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('donations');
+        Schema::dropIfExists('favorites');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

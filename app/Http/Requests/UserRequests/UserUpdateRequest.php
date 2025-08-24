@@ -24,7 +24,7 @@ class UserUpdateRequest extends FormRequest
         return [
             'name' => ['sometimes', 'max:70'],
             'email' => ['sometimes', 'email', 'max:50', 'unique:users,email'],
-            'tel' => ['sometimes', 'max:20', 'unique:users,tel'],
+            'phone' => ['sometimes', 'max:20', 'unique:users,phone'],
             'password' => ['sometimes', 'min:8', 'confirmed'],
             'location' => ['nullable'],
         ];

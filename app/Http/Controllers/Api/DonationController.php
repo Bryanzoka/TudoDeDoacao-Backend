@@ -27,12 +27,14 @@ class DonationController extends Controller
 
         $data['user_id'] = auth()->id();
 
-        if ($request->hasFile('donation_image')) {
-            $data['donation_image'] = $request->file('donation_image')->store('donations', 'public');
+        $data['brief_description'] = str_split($data['description'], 17)[0] . '...';
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('donations', 'public');
         }
 
         $donation = Donation::create($data);
-        $donation->donation_filteredName = strtolower(str::ascii($donation->donation_name));
+        $donation->search_name = strtolower(str::ascii($donation->name));
         $donation->save();
         return new DonationResource($donation);
     }
@@ -42,23 +44,23 @@ class DonationController extends Controller
         return new DonationResource($donation);
     }
 
+    //Insert _method = PATCH in form-data POST requests to update the image and its other attributes
     public function update(DonationUpdateRequest $request, Donation $donation)
     {
         if (auth()->id() != $donation->user_id) {
             return response()->json(['message' => 'invalid operation, mismatched credentials'], 401);
         }
 
-        //Insert _method = PATCH in form-data POST requests to update the image and its other attributes
-        $validatedData = $request->validated();
-        $donation->fill($validatedData);
+        $data = $request->validated();
+        $donation->fill($data);
 
-        if ($request->hasFile('donation_image')) {
-            if ($donation->donation_image && Storage::disk('public')->exists($donation->donation_image)) {
-                Storage::disk('public')->delete($donation->donation_image);
+        if ($request->hasFile('image')) {
+            if ($donation->image && Storage::disk('public')->exists($donation->image)) {
+                Storage::disk('public')->delete($donation->image);
             }
 
-            $path = $request->file('donation_image')->store('donations', 'public');
-            $donation->donation_image = $path;
+            $path = $request->file('image')->store('donations', 'public');
+            $donation->image = $path;
         }
 
         $donation->save();
@@ -71,7 +73,7 @@ class DonationController extends Controller
         $donations = Donation::where('user_id', '=', $id)->get();
 
         if ($donations->isEmpty()) {
-            return response()->json(['message' => 'no donations found'], 404);
+            return response()->json(['message' => 'donations not found'], 404);
         }
 
         return DonationResource::collection($donations);
@@ -80,7 +82,7 @@ class DonationController extends Controller
     public function getByName($name)
     {
         $firstWord = explode(' ', $name)[0];
-        $donations = Donation::where('donation_filteredName', 'like', '%' . strtolower($firstWord) . '%')->get();
+        $donations = Donation::where('search_name', 'like', '%' . strtolower($firstWord) . '%')->get();
 
         if ($donations->isEmpty()) {
             return response()->json(['message' => 'no donations found with this name']);
@@ -91,7 +93,7 @@ class DonationController extends Controller
 
     public function getByCategory($category)
     {
-        $donations = Donation::where('donation_category', '=', $category)->get();
+        $donations = Donation::where('category', '=', $category)->get();
 
         if ($donations->isEmpty()) {
             return response()->json(['message'=> 'no donations found with this category'],404);
@@ -102,7 +104,7 @@ class DonationController extends Controller
 
     public function getByLocation($location)
     {
-        $donations = Donation::where('donation_location', '=', $location)->get();
+        $donations = Donation::where('location', '=', $location)->get();
 
         if ($donations->isEmpty()) {
             return response()->json(['message'=> 'no donations found for this location'],404);
@@ -114,7 +116,7 @@ class DonationController extends Controller
     public function getByMyLocation()
     {
         $user = auth()->user();
-        $donations = Donation::where('donation_location', '=', $user->location)->where('user_id', '!=', $user->id)->get();
+        $donations = Donation::where('location', '=', $user->location)->where('user_id', '!=', $user->id)->get();
 
         if ($donations->isEmpty()) {
             return response()->json(['message'=> 'no donations found for your location'],404);
@@ -129,7 +131,7 @@ class DonationController extends Controller
         $donations = Donation::where('user_id', '=', $user->id)->get();
 
         if ($donations->isEmpty()) {
-            return response()->json(['message' => 'no donation found'], 404);
+            return response()->json(['message' => 'donations not found'], 404);
         }
 
         return DonationResource::collection($donations);
@@ -141,8 +143,8 @@ class DonationController extends Controller
             return response()->json(['message' => 'invalid operation, mismatched credentials'], 401);
         }
 
-        if ($donation->donation_image && Storage::disk('public')->exists($donation->donation_image)) {
-            Storage::disk('public')->delete($donation->donation_image);
+        if ($donation->image && Storage::disk('public')->exists($donation->image)) {
+            Storage::disk('public')->delete($donation->image);
         }
 
         $donation->delete();
