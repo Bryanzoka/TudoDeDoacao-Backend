@@ -20,7 +20,13 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
-        $user = User::create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('profile_image')) {
+            $data['profile_image'] = $request->file('profile_image')->store('users', 'public');
+        }
+
+        $user = User::create($data);
         $token = JWTAuth::fromUser($user);
 
         return response()->json(['token' => $token, 'user' => new UserResource($user)], 201);

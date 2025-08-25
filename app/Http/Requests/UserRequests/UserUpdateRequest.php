@@ -25,6 +25,7 @@ class UserUpdateRequest extends FormRequest
             'name' => ['sometimes', 'max:70'],
             'email' => ['sometimes', 'email', 'max:50', 'unique:users,email'],
             'phone' => ['sometimes', 'max:20', 'unique:users,phone'],
+            'profile_image' => ['sometimes', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], 
             'password' => ['sometimes', 'min:8', 'confirmed'],
             'location' => ['nullable'],
         ];
