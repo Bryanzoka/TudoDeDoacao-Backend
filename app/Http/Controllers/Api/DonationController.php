@@ -27,7 +27,7 @@ class DonationController extends Controller
 
         $data['user_id'] = auth()->id();
 
-        $data['brief_description'] = str_split($data['description'], 17)[0] . '...';
+        $data['brief_description'] = str_split($data['description'], 47)[0] . '...';
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('donations', 'public');
@@ -85,7 +85,7 @@ class DonationController extends Controller
         $donations = Donation::where('search_name', 'like', '%' . strtolower($firstWord) . '%')->get();
 
         if ($donations->isEmpty()) {
-            return response()->json(['message' => 'no donations found with this name']);
+            return response()->json(['message' => 'no donations found with this name'], 404);
         }
 
         return DonationResource::collection($donations);

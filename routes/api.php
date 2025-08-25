@@ -17,15 +17,15 @@ Route::apiResource('users', UserController::class)->except([
     'edit'
 ]);
 
-Route::get('/donations/getmydonations', [DonationController::class, 'getMyDonations'])->middleware('jwt.auth');
+Route::get('/donations/my', [DonationController::class, 'getMyDonations'])->middleware('jwt.auth');
 
-Route::get('/donations/getbylocation/{location}', [DonationController::class, 'getByLocation']);
+Route::get('/donations/location/{location}', [DonationController::class, 'getByLocation']);
 
-Route::get('/donations/getbymylocation', [DonationController::class, 'getByMyLocation'])->middleware('jwt.auth');
+Route::get('/donations/location', [DonationController::class, 'getByMyLocation'])->middleware('jwt.auth');
 
-Route::get('/donations/getbycategory/{category}', [DonationController::class, 'getByCategory']);
+Route::get('/donations/category/{category}', [DonationController::class, 'getByCategory']);
 
-Route::get('/donations/getbyname/{name}', [DonationController::class, 'getByName']);
+Route::get('/donations/search/{name}', [DonationController::class, 'getByName']);
 
 Route::get('/donations/favorites', [FavoriteController::class, 'myFavorites'])->middleware('jwt.auth');
 
@@ -36,9 +36,9 @@ Route::apiResource('donations', DonationController::class)->except([
 
 Route::get('/donations/users/{id}', [DonationController::class, 'getByUser']);
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/auth/login', [AuthController::class, 'login']);
 
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
+Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
 
 Route::post('/donations/favorites/{donation}', [FavoriteController::class, 'favorite'])->middleware('jwt.auth');
 
