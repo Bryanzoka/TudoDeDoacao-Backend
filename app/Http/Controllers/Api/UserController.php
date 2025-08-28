@@ -7,11 +7,18 @@ use App\Http\Requests\UserRequests\UserRequest;
 use App\Http\Requests\UserRequests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Services\UserService;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
+    private readonly UserService $userservice;
+
+    public function __construct(UserService $userservice)
+    {
+        $this->userservice = $userservice;
+    }
+    
     public function index()
     {
         $users = User::all();
@@ -20,18 +27,12 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
-        $data = $request->validated();
-
-        if ($request->hasFile('profile_image')) {
-            $data['profile_image'] = $request->file('profile_image')->store('users', 'public');
-        }
-
-        $user = User::create($data);
+        $user = $this->userservice->register($request->validated());
         $token = JWTAuth::fromUser($user);
 
-        return response()->json(['token' => $token, 'user' => new UserResource($user)], 201);
+        return response()->json(['token' => $token, 'user' => new UserResource($user)])->setStatusCode(201);
     }
-
+    
     public function show(User $user)
     {
         return new UserResource($user);
