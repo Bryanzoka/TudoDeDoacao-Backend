@@ -11,7 +11,7 @@ class UserRepository implements IUserRepository
     {
         return User::all();
     }
-
+  
     public function create(array $data)
     {
         return User::create($data);
