@@ -9,8 +9,6 @@ use App\Http\Requests\UserRequests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -23,8 +21,12 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::all();
-        return UserResource::collection($users);
+        try {
+            $users = $this->userService->getAllUsers();
+            return response()->json(['users' => $users], 200);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage());
+        }
     }
 
     public function store(UserRequest $request)

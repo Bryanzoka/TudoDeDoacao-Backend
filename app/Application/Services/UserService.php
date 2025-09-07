@@ -16,6 +16,11 @@ class UserService implements IUserService
         $this->userRepository = $userRepository;
     }
 
+    public function getAllUsers()
+    {
+        return UserResource::collection($this->userRepository->getAllUsers() ?? throw new Exception('users not found'));
+    }
+  
     public function createUser(array $data)
     {
         if (isset($data['profile_image'])) {

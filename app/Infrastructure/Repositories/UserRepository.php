@@ -7,6 +7,11 @@ use App\Models\User;
 
 class UserRepository implements IUserRepository
 {
+    public function getAllUsers()
+    {
+        return User::all();
+    }
+  
     public function create(array $data)
     {
         return User::create($data);
