@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Repositories;
 
 use App\Domain\Repositories\IUserRepository;
+use App\Http\Requests\UserRequests\UserUpdateRequest;
 use App\Models\User;
 
 class UserRepository implements IUserRepository
@@ -12,13 +13,18 @@ class UserRepository implements IUserRepository
         return User::all();
     }
 
+    public function getById(int $id)
+    {
+        return User::find($id);
+    }
+
     public function create(array $data)
     {
         return User::create($data);
     }
 
-    public function getById(int $id)
+    public function updateUser(array $user)
     {
-        return User::find($id);
+        return User::update($user);
     }
 }

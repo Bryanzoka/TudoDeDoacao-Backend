@@ -44,14 +44,9 @@ class UserController extends Controller
         }
     }
 
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(UserUpdateRequest $request)
     {
-        if (auth()->id() != $user->id) {
-            return response()->json(['message' => 'invalid operation, login not matching'], 401);
-        }
-
-        $user->update($request->validated());
-        return new UserResource($user);
+        return $this->userService->updateUser($request->validated(), auth()->id());
     }
 
     public function destroy(User $user)
