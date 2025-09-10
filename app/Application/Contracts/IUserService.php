@@ -2,8 +2,6 @@
 
 namespace App\Application\Contracts;
 
-use App\Http\Requests\UserRequests\UserUpdateRequest;
-
 interface IUserService
 {
     public function getAllUsers();

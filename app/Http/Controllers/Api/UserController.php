@@ -6,7 +6,6 @@ use App\Application\Contracts\IUserService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequests\UserRequest;
 use App\Http\Requests\UserRequests\UserUpdateRequest;
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
 class UserController extends Controller

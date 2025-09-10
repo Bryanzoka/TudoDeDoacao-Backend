@@ -3,7 +3,6 @@
 namespace App\Infrastructure\Repositories;
 
 use App\Domain\Repositories\IUserRepository;
-use App\Http\Requests\UserRequests\UserUpdateRequest;
 use App\Models\User;
 
 class UserRepository implements IUserRepository
