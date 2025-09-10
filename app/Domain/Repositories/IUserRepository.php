@@ -2,7 +2,6 @@
 
 namespace App\Domain\Repositories;
 
-use App\Http\Requests\UserRequests\UserUpdateRequest;
 use App\Models\User;
 
 interface IUserRepository
