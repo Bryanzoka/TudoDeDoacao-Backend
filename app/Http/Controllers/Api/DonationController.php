@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use App\Enums\DonationStatus;
 use App\Models\Donation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DonationRequests\DonationRequest;

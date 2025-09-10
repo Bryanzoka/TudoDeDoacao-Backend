@@ -26,7 +26,7 @@ class UserService implements IUserService
     {
         return new UserResource($this->userRepository->getById($id) ?? throw new Exception('user not found', 404));
     }
-
+    
     public function createUser(array $data)
     {
         if (isset($data['profile_image'])) {

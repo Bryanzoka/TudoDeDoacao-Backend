@@ -8,6 +8,7 @@ use App\Http\Requests\UserRequests\UserRequest;
 use App\Http\Requests\UserRequests\UserUpdateRequest;
 use App\Models\User;
 use Exception;
+
 class UserController extends Controller
 {
     private readonly IUserService $userService;
