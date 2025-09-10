@@ -23,8 +23,9 @@ class UserRepository implements IUserRepository
         return User::create($data);
     }
 
-    public function updateUser(array $user)
+    public function updateUser(User $user, array $data)
     {
-        return User::update($user);
+        $user->update($data);
+        return $user;
     }
 }
