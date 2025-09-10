@@ -6,7 +6,6 @@ use App\Application\Contracts\IUserService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequests\UserRequest;
 use App\Http\Requests\UserRequests\UserUpdateRequest;
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
 
@@ -42,6 +41,7 @@ class UserController extends Controller
             return $this->userService->getUserById($id);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
+        }
     }
 
     public function update(UserUpdateRequest $request, int $id)
