@@ -27,4 +27,9 @@ class UserRepository implements IUserRepository
         $user->update($data);
         return $user;
     }
+
+    public function deleteUser(User $user)
+    {
+        return $user->delete();
+    }
 }

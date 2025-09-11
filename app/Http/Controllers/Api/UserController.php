@@ -38,7 +38,7 @@ class UserController extends Controller
     public function show(int $id)
     {
         try {
-            return $this->userService->getUserById($id);
+            return $this->userService->getUserById($id, (int)auth()->id());
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
@@ -46,20 +46,20 @@ class UserController extends Controller
 
     public function update(UserUpdateRequest $request, int $id)
     {
-        if (auth()->id() != $id) {
-            return response()->json(['message' => 'invalid operation, login not matching'], 401);
+        try {
+            return $this->userService->updateUser($request->validated(), $id, (int)auth()->id());
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
         }
-
-        return $this->userService->updateUser($request->validated(), $id);
     }
 
-    public function destroy(User $user)
+    public function destroy(int $id)
     {
-        if (auth()->id() != $user->id) {
-            return response()->json(['message' => 'invalid operation, login not matching'], 401);
+        try {
+            $this->userService->deleteUser($id, (int)auth()->id());
+            return response(null, 204);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
         }
-
-        $user->delete();
-        return response(null, 204);
     }
 }
