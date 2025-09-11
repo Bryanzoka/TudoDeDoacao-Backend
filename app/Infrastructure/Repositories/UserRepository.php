@@ -3,7 +3,6 @@
 namespace App\Infrastructure\Repositories;
 
 use App\Domain\Repositories\IUserRepository;
-use App\Http\Requests\UserRequests\UserUpdateRequest;
 use App\Models\User;
 
 class UserRepository implements IUserRepository
@@ -27,5 +26,10 @@ class UserRepository implements IUserRepository
     {
         $user->update($data);
         return $user;
+    }
+
+    public function deleteUser(User $user)
+    {
+        return $user->delete();
     }
 }
