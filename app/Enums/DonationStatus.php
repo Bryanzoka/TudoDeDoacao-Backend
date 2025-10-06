@@ -8,5 +8,4 @@ enum DonationStatus: string
     case Pending = 'pending';
     case Disable = 'disable';
 }
-
 ?>
