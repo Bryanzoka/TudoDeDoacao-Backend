@@ -6,7 +6,6 @@ use App\Application\Contracts\IUserService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequests\UserRequest;
 use App\Http\Requests\UserRequests\UserUpdateRequest;
-use App\Models\User;
 use Exception;
 
 class UserController extends Controller
@@ -21,7 +20,7 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = $this->userService->getAllUsers();
+            $users = $this->userService->getAll();
             return response()->json(['users' => $users], 200);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
@@ -30,7 +29,7 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
-        $user = $this->userService->createUser($request->validated());
+        $user = $this->userService->create($request->validated());
 
         return response()->json(['user' => $user], 201);
     }
@@ -38,7 +37,7 @@ class UserController extends Controller
     public function show(int $id)
     {
         try {
-            return $this->userService->getUserById($id, (int)auth()->id());
+            return $this->userService->getById($id, (int)auth()->id());
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
@@ -47,7 +46,7 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, int $id)
     {
         try {
-            return $this->userService->updateUser($request->validated(), $id, (int)auth()->id());
+            return $this->userService->update($request->validated(), $id, (int)auth()->id());
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
@@ -56,7 +55,7 @@ class UserController extends Controller
     public function destroy(int $id)
     {
         try {
-            $this->userService->deleteUser($id, (int)auth()->id());
+            $this->userService->delete($id, (int)auth()->id());
             return response(null, 204);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());

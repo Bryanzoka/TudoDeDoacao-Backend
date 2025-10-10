@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DonationResource;
-use App\Models\Donation;
+use App\Domain\Models\Donation;
 
 class FavoriteController extends Controller
 {

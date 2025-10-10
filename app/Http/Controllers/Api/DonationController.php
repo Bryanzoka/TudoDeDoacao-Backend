@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use App\Models\Donation;
+use App\Domain\Models\Donation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DonationRequests\DonationRequest;
 use App\Http\Requests\DonationRequests\DonationUpdateRequest;
