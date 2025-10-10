@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Application\Contracts\IUserService;
-use App\Application\Services\UserService;
+use App\Infrastructure\Services\UserService;
 use App\Domain\Repositories\IUserRepository;
 use App\Infrastructure\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;

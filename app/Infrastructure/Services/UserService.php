@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Services;
+namespace App\Infrastructure\Services;
 
 use App\Application\Contracts\IUserService;
 use App\Domain\Repositories\IUserRepository;
@@ -18,18 +18,18 @@ class UserService implements IUserService
         $this->userRepository = $userRepository;
     }
 
-    public function getAllUsers()
+    public function getAll()
     {
-        return UserResource::collection($this->userRepository->getAllUsers() ?? throw new Exception('users not found', 404));
+        return UserResource::collection($this->userRepository->getAll() ?? throw new Exception('users not found', 404));
     }
 
-    public function getUserById(int $id, int $jwtUserId)
+    public function getById(int $id, int $jwtUserId)
     {
         $this->validateUserAcess($id, $jwtUserId);
         return new UserResource($this->userRepository->getById($id) ?? throw new Exception('user not found', 404));
     }
     
-    public function createUser(array $data)
+    public function create(array $data)
     {
         if (isset($data['profile_image'])) {
             $data['profile_image'] = $data['profile_image']->store('users', 'public');
@@ -38,7 +38,7 @@ class UserService implements IUserService
         return new UserResource($this->userRepository->create($data));
     }
 
-    public function updateUser(array $data, int $id, int $jwtUserId)
+    public function update(array $data, int $id, int $jwtUserId)
     {
         $this->validateUserAcess($id, $jwtUserId);
         $user = $this->getUserModelById($id);
@@ -51,16 +51,16 @@ class UserService implements IUserService
             $data['profile_image'] = $data['profile_image']->store('users', 'public');
         }
 
-        return new UserResource($this->userRepository->updateUser($user, $data));
+        return new UserResource($this->userRepository->update($user, $data));
     }
 
-    public function deleteUser(int $id, int $jwtUserId)
+    public function delete(int $id, int $jwtUserId)
     {
         $this->validateUserAcess($id, $jwtUserId);
 
         $user = $this->getUserModelById($id);
 
-        return $this->userRepository->deleteUser($user);
+        return $this->userRepository->delete($user);
     }
 
     private function validateUserAcess(int $id, int $jwtUserId)

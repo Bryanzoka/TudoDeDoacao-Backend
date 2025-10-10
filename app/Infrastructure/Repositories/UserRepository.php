@@ -3,11 +3,11 @@
 namespace App\Infrastructure\Repositories;
 
 use App\Domain\Repositories\IUserRepository;
-use App\Models\User;
+use App\Domain\Models\User;
 
 class UserRepository implements IUserRepository
 {
-    public function getAllUsers()
+    public function getAll()
     {
         return User::all();
     }
@@ -22,13 +22,13 @@ class UserRepository implements IUserRepository
         return User::create($data);
     }
 
-    public function updateUser(User $user, array $data)
+    public function update(User $user, array $data)
     {
         $user->update($data);
         return $user;
     }
 
-    public function deleteUser(User $user)
+    public function delete(User $user)
     {
         return $user->delete();
     }
