@@ -16,6 +16,11 @@ class UserRepository implements IUserRepository
     {
         return User::find($id);
     }
+    
+    public function getByEmail(string $email)
+    {
+        return User::where('email', '=', $email);
+    }
 
     public function create(array $data)
     {
