@@ -2,27 +2,48 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Application\Contracts\IAuthService;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    private readonly IAuthService $authService;
+
+    public function __construct(IAuthService $authService)
     {
-        $credentials = $request->only('email','password');
+        $this->authService = $authService;
+    }
+    
+    public function login(Request $request)
+    {   
+        try {
+            $credentials = $request->only('email','password');
+            $token = $this->authService->login($credentials);
 
-        if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['message'=> 'invalid credentials'],401);
+            return response()->json(['token' => $token]);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
         }
-
-        return response()->json($token);
     }
 
     public function logout()
     {
-        auth()->logout();
+        $this->authService->logout();
 
-        return response()->json(['message' => 'logout successful'], 204);
+        return response()->json(null, 204);
+    }
+
+    public function requestCode(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $email = $request->input('email');
+
+        $this->authService->requestVerificationCode($email);
+
+        return response()->json(null, 204);
     }
 }

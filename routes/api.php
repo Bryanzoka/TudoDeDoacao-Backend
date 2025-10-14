@@ -17,6 +17,8 @@ Route::apiResource('users', UserController::class)->except([
     'edit'
 ]);
 
+Route::post('/auth/request-verification-code', [AuthController::class, 'requestCode']);
+
 Route::get('/donations/my', [DonationController::class, 'getMyDonations'])->middleware('jwt.auth');
 
 Route::get('/donations/location/{location}', [DonationController::class, 'getByLocation']);
