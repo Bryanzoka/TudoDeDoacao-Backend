@@ -21,7 +21,7 @@ class AuthController extends Controller
     {   
         try {
             $credentials = $request->only('email','password');
-            $token = $this->authService->login($credentials);
+            $token = $this->authService->generateToken($credentials);
 
             return response()->json(['token' => $token]);
         } catch (Exception $ex) {
@@ -38,12 +38,15 @@ class AuthController extends Controller
 
     public function requestCode(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        try {
+            $request->validate(['email' => 'required|email']);
+            $email = $request->input('email');
 
-        $email = $request->input('email');
+            $this->authService->requestVerificationCode($email);
 
-        $this->authService->requestVerificationCode($email);
-
-        return response()->json(null, 204);
+            return response()->json(null, 204);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
+        }
     }
 }
