@@ -121,14 +121,14 @@
                 <img src="{{ asset('images/blossom-flower.png') }}" alt="Flor de Cerejeira" class="img__main">
 
                 <div class="container-title__main"> 
-                    <h2>Verify Your Email Account</h2>
+                    <h2>Verificar seu email</h2>
         
                 <!-- Texto descritivo -->
                 <p class="p__main">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.
+                   Estamos muitos realizados por ter você conosco! Você está a um passo de completar sua conta e usufruir de tudo que o nosso aplicativo oferece.
                 </p>
                     <div class="code__container-title">
-                        <h1 class="h1__code"> 1245642 </h1>
+                        <h1 class="h1__code"> {{ $body  }} </h1>
                     </div>
                 </div>
 
