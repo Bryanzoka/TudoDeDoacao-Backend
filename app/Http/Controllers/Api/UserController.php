@@ -7,6 +7,7 @@ use App\Application\Contracts\IUserService;
 use App\Http\Requests\UserRequests\UserStoreRequest;
 use App\Http\Requests\UserRequests\UserUpdateRequest;
 use Exception;
+use Mail;
 
 class UserController extends Controller
 {
