@@ -21,6 +21,10 @@ Route::post('/auth/request-verification-code', [AuthController::class, 'requestC
 
 Route::get('/donations/my', [DonationController::class, 'getMyDonations'])->middleware('jwt.auth');
 
+Route::get('/email', function () {
+    return view('emails.email');
+});
+
 Route::get('/donations/location/{location}', [DonationController::class, 'getByLocation']);
 
 Route::get('/donations/location', [DonationController::class, 'getByMyLocation'])->middleware('jwt.auth');
