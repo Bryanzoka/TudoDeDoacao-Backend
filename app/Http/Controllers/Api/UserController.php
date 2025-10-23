@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Application\Contracts\IUserService;
-use App\Http\Requests\UserRequests\UserRequest;
+use App\Http\Requests\UserRequests\UserStoreRequest;
 use App\Http\Requests\UserRequests\UserUpdateRequest;
-use App\Infrastructure\Services\EmailService;
-use Illuminate\Http\Request;
 use Exception;
 use Mail;
 
@@ -30,7 +28,7 @@ class UserController extends Controller
         }
     }
 
-    public function store(UserRequest $request)
+    public function store(UserStoreRequest $request)
     {
         $user = $this->userService->create($request->validated());
 

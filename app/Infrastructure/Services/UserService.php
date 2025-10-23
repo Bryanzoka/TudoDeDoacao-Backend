@@ -3,11 +3,13 @@
 namespace App\Infrastructure\Services;
 
 use App\Application\Contracts\IUserService;
+use App\Domain\Models\verificationCode;
 use App\Domain\Repositories\IUserRepository;
 use App\Http\Resources\UserResource;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\UnauthorizedException;
+use PhpParser\Lexer\TokenEmulator\ReadonlyFunctionTokenEmulator;
 
 class UserService implements IUserService
 {
@@ -31,6 +33,11 @@ class UserService implements IUserService
     
     public function create(array $data)
     {
+        $verification = verificationCode::where('email', '=', $data['email']);
+
+        !$verification->validateCode($data['code']);
+        
+
         if (isset($data['profile_image'])) {
             $data['profile_image'] = $data['profile_image']->store('users', 'public');
         }
