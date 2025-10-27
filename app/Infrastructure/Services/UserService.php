@@ -33,10 +33,9 @@ class UserService implements IUserService
     
     public function create(array $data)
     {
-        $verification = verificationCode::where('email', '=', $data['email']);
-
-        !$verification->validateCode($data['code']);
+        dd($verification = verificationCode::where('email', $data['email']));
         
+        !$verification->validateCode($verification->code);
 
         if (isset($data['profile_image'])) {
             $data['profile_image'] = $data['profile_image']->store('users', 'public');
