@@ -4,29 +4,27 @@ namespace App\Infrastructure\Services;
 
 use App\Application\Contracts\IAuthService;
 use App\Application\Contracts\IEmailService;
+use App\Application\Contracts\IVerificationCodeService;
 use App\Domain\Repositories\IUserRepository;
 use Exception;
-use Hoa\Math\Sampler\Random;
 
 class AuthService implements IAuthService
 {
     private readonly IUserRepository $userRepository;
     private readonly IEmailService $emailService;
-    public function __construct(IUserRepository $userRepository, IEmailService $emailService)
+    private readonly IVerificationCodeService $verificationService;
+    public function __construct(IUserRepository $userRepository, IEmailService $emailService, IVerificationCodeService $verificationService)
     {
         $this->userRepository = $userRepository;
         $this->emailService = $emailService;
+        $this->verificationService = $verificationService;
     }
 
-    public function login(array $credentials)
+    public function generateToken(array $credentials)
     {
         $user = $this->userRepository->getByEmail($credentials['email']);
 
-        if (!$user) {
-            throw new Exception('invalid credentials', 401);
-        }
-        
-        if (!$token = auth()->attempt($credentials)) {
+        if (!$user || !$token = auth()->attempt($credentials)) {
             throw new Exception('invalid credentials', 401);
         }
 
@@ -40,7 +38,7 @@ class AuthService implements IAuthService
 
     public function requestVerificationCode(string $email)
     {
-        $code = rand(100000, 999999);
-        $this->emailService->send($email, 'verification code', "your verification code is $code");
+        $verification = $this->verificationService->generateAndSave($email);
+        $this->emailService->send($email, 'verification code', $verification->code);
     }
 }

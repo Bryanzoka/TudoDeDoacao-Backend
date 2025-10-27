@@ -10,6 +10,6 @@ class EmailService implements IEmailService
 {
     public function send(string $to, string $subject, string $body): void
     {
-        Mail::to($to)->send(new EmailSender($subject, $body, null));
+        Mail::to($to)->send(new EmailSender($subject, $body, 'emails.email'));
     }
 }

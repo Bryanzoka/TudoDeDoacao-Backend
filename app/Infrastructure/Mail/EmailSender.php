@@ -8,7 +8,6 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-
 class EmailSender extends Mailable
 {
     use Queueable, SerializesModels;
@@ -21,7 +20,7 @@ class EmailSender extends Mailable
     {
         $this->subject = $subject;
         $this->body = $body;
-        $this->view = $view ?? 'emails.verificationCode';
+        $this->view = $view ?? 'emails.email';
     }
 
     /**
@@ -41,7 +40,7 @@ class EmailSender extends Mailable
     {
         return new Content(
             view: $this->view,
-            with: ['body' => $this->body]
+            with: ['body', $this->body],
         );
     }
 

@@ -1,145 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifique seu E-mail</title>
 </head>
-<style>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fdeeda;">
+    <!-- Wrapper principal -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #fdeeda; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <!-- Container do email -->
+                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden;">
+                    
+                    <!-- Header com logo -->
+                    <tr>
+                        <td align="center" style="padding: 40px 20px 30px; background: linear-gradient(135deg, #FFE5EC 0%, #FFF0F5 100%);">
+                            <h1 style="margin: 0; color: #6B2737; font-size: 28px; font-weight: 700;">
+                                🌸 Tudo de Doação
+                            </h1>
+                        </td>
+                    </tr>
 
-    {/* Tags */}
+                    <!-- Ícone de envelope -->
+                    <tr>
+                        <td align="center" style="padding: 30px 0 20px;">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #FFCEE0 0%, #FFB3D9 100%); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(255, 182, 217, 0.4);">
+                                <span style="font-size: 40px;">✉️</span>
+                            </div>
+                        </td>
+                    </tr>
 
-    html, body {
-        height: 100%;
-        overflow: hidden;
-        background-color: #fdeeda;
-    }
+                    <!-- Título -->
+                    <tr>
+                        <td align="center" style="padding: 0 40px;">
+                            <h2 style="margin: 0 0 20px; color: #080402; font-size: 26px; font-weight: 600;">
+                                Verificar seu email
+                            </h2>
+                        </td>
+                    </tr>
 
-    body {
-        font-family: gotham, arial, helvetica, sans-serif;
-        padding: 0;
-        margin: 0 auto !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+                    <!-- Texto descritivo -->
+                    <tr>
+                        <td align="center" style="padding: 0 40px 30px;">
+                            <p style="margin: 0; color: #4a4a4a; font-size: 16px; line-height: 1.6; text-align: center;">
+                                Estamos muito realizados por ter você conosco! Você está a um passo de completar sua conta e usufruir de tudo que o nosso aplicativo oferece.
+                            </p>
+                        </td>
+                    </tr>
 
-    header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 20px;
-    }
+                    <!-- Box do código -->
+                    <tr>
+                        <td align="center" style="padding: 0 40px 40px;">
+                            <table cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #FFCEE0 0%, #FFB3D9 100%); border-radius: 15px; box-shadow: 0 4px 15px rgba(255, 182, 217, 0.3);">
+                                <tr>
+                                    <td style="padding: 25px 50px;">
+                                        <p style="margin: 0 0 5px; color: #6B2737; font-size: 14px; font-weight: 600; text-align: center; letter-spacing: 1px;">
+                                            SEU CÓDIGO
+                                        </p>
+                                        <h1 style="margin: 0; color: #080402; font-size: 42px; font-weight: 700; letter-spacing: 8px; text-align: center; font-family: 'Courier New', monospace;">
+                                            {{ $body }}
+                                        </h1>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
 
-    main {
-            display: flex;
-            justify-content: center; 
-            flex-direction: column;
-            align-items: center;
-            width: 100vw;
-        }
+                    <!-- Informações adicionais -->
+                    <tr>
+                        <td align="center" style="padding: 0 40px 30px;">
+                            <p style="margin: 0; color: #777; font-size: 13px; line-height: 1.5; text-align: center;">
+                                Este código expira em <strong>10 minutos</strong>.<br>
+                                Se você não solicitou este código, ignore este email.
+                            </p>
+                        </td>
+                    </tr>
 
-    h1, h2, p {
-        margin: 0; 
-        color: #080402;
-    }
+                    <!-- Decoração floral -->
+                    <tr>
+                        <td align="center" style="padding: 20px 0; background: linear-gradient(135deg, #FFE5EC 0%, #FFF0F5 100%);">
+                            <p style="margin: 0; font-size: 30px;">
+                                🌸 🌺 🌸
+                            </p>
+                        </td>
+                    </tr>
 
-    img:nth-child(3) {
-        transform: rotate(180deg)
-    }
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" style="padding: 30px 40px; background-color: #f8f8f8; border-top: 1px solid #eeeeee;">
+                            <p style="margin: 0 0 10px; color: #999; font-size: 12px;">
+                                © 2025 Tudo de Doação. Todos os direitos reservados.
+                            </p>
+                            <p style="margin: 0; color: #999; font-size: 12px;">
+                                Taboão da Serra, São Paulo, Brasil
+                            </p>
+                        </td>
+                    </tr>
 
-
-    {/* Class */}
-
-    .container-title__main {
-        display: flex;
-        justify-content: center; 
-        flex-direction: column;
-        align-items: center;
-        margin: 50px 0 20px 0;
-    }
-
-    .section__main {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-    }
-
-    .div-images__main {
-        display: flex;
-        justify-content: center; 
-        align-items: center;
-        gap: 20px;
-    }
-
-    .div-carta__section {
-        display: flex;
-        justify-content: center; 
-        align-items: center;
-        position: relative;
-        top: 40px;
-    }
-
-    .code__container-title {
-        width: 250px;
-        height: auto;
-        background-color: #FFCEE0;
-        border-radius: 15px;
-
-        & .h1__code {
-            padding: 10px;
-            letter-spacing: 5px;
-            font-size: 2.5rem;
-        }
-    }
-
-    .img__main {
-        width: 250px;
-        height: auto;
-    }
-
-    .p__main {
-        margin: 10px 0 30px;
-        font-size: 18px;
-        max-width: 450px;
-        text-align: center;
-    }
-</style>
-<body>
-    <header> 
-        <img src="{{ asset('images/Logo.png') }}" alt="Logo" class="">
-    </header>
-    <main> 
-        <div style=" text-align: center; color: white; width: 100vw;">
-
-        <section class="section__main"> 
-            <div class="div-carta__section">
-                <img src="{{ asset('images/img-carta.png') }}" alt="Email Icon" class="img__main">
-            </div>
-                <!-- Título -->
-            <div class="div-images__main">
-                <img src="{{ asset('images/blossom-flower.png') }}" alt="Flor de Cerejeira" class="img__main">
-
-                <div class="container-title__main"> 
-                    <h2>Verify Your Email Account</h2>
-        
-                <!-- Texto descritivo -->
-                <p class="p__main">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.
-                </p>
-                    <div class="code__container-title">
-                        <h1 class="h1__code"> 1245642 </h1>
-                    </div>
-                </div>
-
-                <img src="{{ asset('images/blossom-flower.png') }}" alt="Flor de Cerejeira"  class="img__main">
-            </div>
-        </section>
-
-        <!-- Botão de verificação -->
-
-    </div>
-    </main>
-
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
