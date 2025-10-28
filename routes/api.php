@@ -25,11 +25,6 @@ Route::get('/donations/category/{category}', [DonationController::class, 'getByC
 
 Route::get('/donations/search/{name}', [DonationController::class, 'getByName']);
 
-Route::apiResource('donations', DonationController::class)->except([
-    'create',
-    'edit'
-]);
-
 Route::middleware('jwt.auth')->group(function() {
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -37,12 +32,11 @@ Route::middleware('jwt.auth')->group(function() {
     Route::get('/donations/my', [DonationController::class, 'getMyDonations']);
     Route::get('/donations/location', [DonationController::class, 'getByMyLocation']);
     Route::get('/donations/favorites', [FavoriteController::class, 'myFavorites']);
-    // Route::apiResource('donations', DonationController::class)->except(['create', 'edit']);
+    Route::apiResource('/donations', DonationController::class)->except(['create', 'edit']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::post('/donations/favorites/{donation}', [FavoriteController::class, 'favorite']);
     Route::delete('/donations/favorites/{donation}', [FavoriteController::class, 'unfavorite']);
 });
-
 
 Route::get('/donations/users/{id}', [DonationController::class, 'getByUser']);
 
