@@ -17,20 +17,19 @@ class VerificationCodeService implements IVerificationCodeService
 
     public function getByEmail(string $email)
     {
-        $this->codeRepository->getByEmail($email);
+       return $this->codeRepository->getByEmail($email);
     }
 
     public function generateAndSave(string $email)
     {
+        $this->codeRepository->deleteByEmail($email);
         $verification = verificationCode::generateCodeForEmail($email);
-        $this->codeRepository->save($verification);
-
-        return $verification;
+        return $this->codeRepository->save($verification);
     }
 
     public function validate(string $email, string $code)
     {
-        $verification = verificationCode::where('email', '=', $email);
+        $verification = verificationCode::where('email', $email)->first();
 
         $verification->validateCode($code);
     }

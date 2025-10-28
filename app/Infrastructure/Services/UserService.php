@@ -33,11 +33,18 @@ class UserService implements IUserService
     
     public function create(array $data)
     {
-        $verification = verificationCode::where('email', '=', $data['email']);
-
-        !$verification->validateCode($data['code']);
+<<<<<<< Updated upstream
+        dd($verification = verificationCode::where('email', $data['email']));
         
+        !$verification->validateCode($verification->code);
 
+=======
+        // dd(verificationCode::where('email', $data['email']))->first();
+        $verification = verificationCode::where('email', $data['email'])->first();
+        // dd($verification->validateCode($verification['code']));
+        $verification->validateCode($verification['code']);
+    
+>>>>>>> Stashed changes
         if (isset($data['profile_image'])) {
             $data['profile_image'] = $data['profile_image']->store('users', 'public');
         }

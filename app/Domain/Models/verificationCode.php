@@ -19,7 +19,7 @@ class verificationCode extends Model
         'expires_at'
     ];
 
-    public static function generateCodeForEmail(string $email): self
+    public static function generateCodeForEmail(string $email): array
     {
         if (!str_contains($email, '@')) {
             throw new Exception("Invalid email format", 400);
@@ -28,11 +28,11 @@ class verificationCode extends Model
         $code = rand(100000, 999999);
         $expiresAt = Carbon::now()->addMinutes(10);
 
-        return new verificationCode([
+        return [
             'email' => $email,
             'code' => $code,
             'expires_at' => $expiresAt
-        ]);
+        ];
     }
 
     public function validateCode(string $code)

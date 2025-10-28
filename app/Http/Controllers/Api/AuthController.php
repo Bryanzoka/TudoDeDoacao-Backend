@@ -37,16 +37,13 @@ class AuthController extends Controller
     }
 
     public function requestCode(Request $request)
-    {
+    {   
         try {
-            $request->validate(['email' => 'required|email']);
-            $email = $request->input('email');
-
-            $this->authService->requestVerificationCode($email);
-
+            $email = $request->validate(['email' => 'required|email']);
+            $this->authService->requestVerificationCode($email['email']);
             return response()->json(null, 204);
         } catch (Exception $ex) {
-            return response()->json($ex->getMessage(), $ex->getCode());
+            return response()->json($ex->getMessage());
         }
     }
 }

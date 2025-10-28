@@ -7,7 +7,6 @@ use App\Application\Contracts\IUserService;
 use App\Http\Requests\UserRequests\UserStoreRequest;
 use App\Http\Requests\UserRequests\UserUpdateRequest;
 use Exception;
-use Mail;
 
 class UserController extends Controller
 {
@@ -30,9 +29,10 @@ class UserController extends Controller
 
     public function store(UserStoreRequest $request)
     {
+        // dd($request->all());
         $user = $this->userService->create($request->validated());
 
-        return response()->json(['user' => $user], 201);
+        return response()->json(['user' => $user], 201); 
     }
 
     public function show(int $id)
