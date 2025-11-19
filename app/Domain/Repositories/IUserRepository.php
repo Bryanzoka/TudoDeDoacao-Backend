@@ -7,9 +7,9 @@ use App\Domain\Models\User;
 interface IUserRepository
 {
     public function getAll();
-    public function create(array $data);
+    public function create(User $user);
     public function getById(int $id);
     public function getByEmail(string $email);
-    public function update(User $user, array $data);
+    public function update(User $user);
     public function delete(User $user);
 }

@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Services;
 
 use App\Application\Contracts\IVerificationCodeService;
-use App\Domain\Models\verificationCode;
+use App\Domain\Models\VerificationCode;
 use App\Domain\Repositories\IVerificationCodeRepository;
 
 class VerificationCodeService implements IVerificationCodeService
@@ -17,20 +17,19 @@ class VerificationCodeService implements IVerificationCodeService
 
     public function getByEmail(string $email)
     {
-        $this->codeRepository->getByEmail($email);
+       return $this->codeRepository->getByEmail($email);
     }
 
     public function generateAndSave(string $email)
     {
-        $verification = verificationCode::generateCodeForEmail($email);
-        $this->codeRepository->save($verification);
-
-        return $verification;
+        $this->codeRepository->delete($this->codeRepository->getByEmail($email));
+        $verification = VerificationCode::generateCodeForEmail($email);
+        return $this->codeRepository->save($verification);
     }
 
     public function validate(string $email, string $code)
     {
-        $verification = verificationCode::where('email', '=', $email);
+        $verification = VerificationCode::where('email', $email)->first();
 
         $verification->validateCode($code);
     }

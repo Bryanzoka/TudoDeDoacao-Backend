@@ -39,6 +39,6 @@ class AuthService implements IAuthService
     public function requestVerificationCode(string $email)
     {
         $verification = $this->verificationService->generateAndSave($email);
-        $this->emailService->send($email, 'verification code', "your verification code is $verification->code");
+        $this->emailService->send($email, 'verification code', $verification->code);
     }
 }

@@ -22,14 +22,15 @@ class UserRepository implements IUserRepository
         return User::where('email', '=', $email);
     }
 
-    public function create(array $data)
+    public function create(User $user)
     {
-        return User::create($data);
+        $user->save();
+        return $user;
     }
 
-    public function update(User $user, array $data)
+    public function update(User $user)
     {
-        $user->update($data);
+        $user->save();
         return $user;
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
 
-class verificationCode extends Model
+class VerificationCode extends Model
 {
     use HasFactory;
 
@@ -19,7 +19,7 @@ class verificationCode extends Model
         'expires_at'
     ];
 
-    public static function generateCodeForEmail(string $email): self
+    public static function generateCodeForEmail(string $email): VerificationCode
     {
         if (!str_contains($email, '@')) {
             throw new Exception("Invalid email format", 400);
@@ -28,7 +28,7 @@ class verificationCode extends Model
         $code = rand(100000, 999999);
         $expiresAt = Carbon::now()->addMinutes(10);
 
-        return new verificationCode([
+        return new VerificationCode([
             'email' => $email,
             'code' => $code,
             'expires_at' => $expiresAt

@@ -7,6 +7,7 @@ use App\Application\Contracts\IUserService;
 use App\Http\Requests\UserRequests\UserStoreRequest;
 use App\Http\Requests\UserRequests\UserUpdateRequest;
 use Exception;
+use Illuminate\Routing\Attributes\Middleware;
 
 class UserController extends Controller
 {
@@ -17,6 +18,7 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
+    #[Middleware('role')]
     public function index()
     {
         try {
@@ -29,11 +31,17 @@ class UserController extends Controller
 
     public function store(UserStoreRequest $request)
     {
-        $user = $this->userService->create($request->validated());
+        dd($request);
+        try {
+            $user = $this->userService->create($request->validated());
+            return response()->json(['user' => $user], 201); 
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
+        }
 
-        return response()->json(['user' => $user], 201);
     }
 
+    #[Middleware('role')]
     public function show(int $id)
     {
         try {
@@ -43,6 +51,7 @@ class UserController extends Controller
         }
     }
 
+    #[Middleware('role')]
     public function update(UserUpdateRequest $request, int $id)
     {
         try {
@@ -52,6 +61,7 @@ class UserController extends Controller
         }
     }
 
+    #[Middleware('role')]
     public function destroy(int $id)
     {
         try {

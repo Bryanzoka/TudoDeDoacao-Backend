@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\DonationRequests;
 use Illuminate\Validation\Rules\Enum;
-use App\Enums\DonationStatus;
+use App\Domain\ValueObjects\DonationStatus;
 
 use Illuminate\Foundation\Http\FormRequest;
 

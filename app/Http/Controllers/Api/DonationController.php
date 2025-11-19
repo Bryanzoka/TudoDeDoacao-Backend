@@ -1,38 +1,47 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
+use app\Application\Contracts\IDonationService;
 use App\Domain\Models\Donation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DonationRequests\DonationRequest;
 use App\Http\Requests\DonationRequests\DonationUpdateRequest;
 use App\Http\Resources\DonationResource;
+use Exception;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\str;
 
 class DonationController extends Controller
 {
+    private readonly IDonationService $donationService;
+
+    public function __construct(IDonationService $donationService)
+    {
+        $this->donationService = $donationService;
+    }
+
     public function index()
     {
-        $donations = Donation::all();
-        return DonationResource::collection($donations);
+        try {
+            $donations = $this->donationService->getAll(); 
+            return response()->json(['donations'=> $donations], 200);
+        } catch(Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
+        }
     }
 
     public function store(DonationRequest $request)
     {
-        $data = $request->validated();
-
-        $data['user_id'] = auth()->id();
-
-        $data['brief_description'] = str_split($data['description'], 47)[0] . '...';
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('donations', 'public');
+        try {
+            $res = $this->donationService->create($request->validated());
+            return response()->json(['donation' => $res], 201);
+        } catch(Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
         }
-
-        $donation = Donation::create($data);
-        $donation->search_name = strtolower(str::ascii($donation->name));
-        $donation->save();
-        return new DonationResource($donation);
+        // $donation = Donation::create($data);
+        // $donation->search_name = strtolower(str::ascii($donation->name));
+        // $donation->save();
+        // return new DonationResource($donation);
     }
 
     public function show(Donation $donation)
@@ -47,8 +56,7 @@ class DonationController extends Controller
             return response()->json(['message' => 'invalid operation, mismatched credentials'], 401);
         }
 
-        $data = $request->validated();
-        $donation->fill($data);
+        $donation = $this->donationService->update($request->validated(), $donation->id(), auth()->id());
 
         if ($request->hasFile('image')) {
             if ($donation->image && Storage::disk('public')->exists($donation->image)) {
@@ -58,9 +66,7 @@ class DonationController extends Controller
             $path = $request->file('image')->store('donations', 'public');
             $donation->image = $path;
         }
-
         $donation->save();
-
         return new DonationResource($donation);
     }
 
