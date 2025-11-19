@@ -9,21 +9,17 @@ class VerificationCodeRepository implements IVerificationCodeRepository
 {
     public function getByEmail(string $email)
     {
-        return verificationCode::where('email', $email)->first();
+        return verificationCode::where('email', '=', $email)->first();
     }
 
-    public function save(array $code)
+    public function save(VerificationCode $code)
     {
-        return verificationCode::create($code);
+        $code->save();
+        return $code;
     }
 
     public function delete(verificationCode $code)
     {
         $code->delete();
-    }
-
-    public function deleteByEmail(string $email)
-    {
-        verificationCode::where('email', $email)->delete();
     }
 }

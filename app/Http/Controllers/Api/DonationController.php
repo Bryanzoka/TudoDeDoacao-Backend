@@ -10,7 +10,6 @@ use App\Http\Requests\DonationRequests\DonationUpdateRequest;
 use App\Http\Resources\DonationResource;
 use Exception;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\str;
 
 class DonationController extends Controller
 {
@@ -56,7 +55,8 @@ class DonationController extends Controller
         if (auth()->id() != $donation->user_id) {
             return response()->json(['message' => 'invalid operation, mismatched credentials'], 401);
         }
-        $donation = $this->donationService->update($request->validated(), $donation->id());
+
+        $donation = $this->donationService->update($request->validated(), $donation->id(), auth()->id());
 
         if ($request->hasFile('image')) {
             if ($donation->image && Storage::disk('public')->exists($donation->image)) {
@@ -66,7 +66,7 @@ class DonationController extends Controller
             $path = $request->file('image')->store('donations', 'public');
             $donation->image = $path;
         }
-        // $donation->save();
+        $donation->save();
         return new DonationResource($donation);
     }
 

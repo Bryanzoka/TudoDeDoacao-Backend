@@ -2,11 +2,11 @@
 
 namespace App\Domain\Repositories;
 
-use App\Domain\Models\verificationCode;
+use App\Domain\Models\VerificationCode;
 
 interface IVerificationCodeRepository
 {
     public function getByEmail(string $email);
-    public function save(array $code);
-    public function delete(verificationCode $code);
+    public function save(VerificationCode $code);
+    public function delete(VerificationCode $code);
 }

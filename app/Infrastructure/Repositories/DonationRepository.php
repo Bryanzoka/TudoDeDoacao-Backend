@@ -4,32 +4,33 @@ namespace app\Infrastructure\Repositories;
 
 use App\Domain\Models\Donation;
 use App\Domain\Repositories\IDonationRepository;
-use App\Http\Resources\DonationResource;
 
 class DonationRepository implements IDonationRepository
 {
-    public function findAll()
+    public function getAll()
     {
         return Donation::all();
     }
 
-    public function save(array $data)
+    public function getById(int $id)
     {
-       Donation::create($data);
+        return Donation::where('id', '=', $id);
     }
 
-    public function findById()
+    public function create(Donation $donation)
     {
-
+       $donation->save();
+       return $donation;
     }
 
-    public function update()
+    public function update(Donation $donation)
     {
-
+        $donation->save();
+        return $donation;
     }
 
-    public function remove()
+    public function delete(Donation $donation)
     {
-        
+        $donation->delete();
     }
 }

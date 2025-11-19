@@ -6,9 +6,9 @@ use App\Domain\Models\Donation;
 
 interface IDonationRepository
 {
-    public function findAll();
-    public function save(array $data);
-    public function findById();
-    public function update();
-    public function remove();
+    public function getAll();
+    public function getById(int $id);
+    public function create(Donation $donation);
+    public function update(Donation $donation);
+    public function delete(Donation $donation);
 }

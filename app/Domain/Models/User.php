@@ -19,6 +19,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'profile_image',
         'password',
         'location',
+        'role'
     ];
     protected $hidden = [
         'password',
@@ -42,6 +43,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'role' => $this->role
+        ];
     }
 }

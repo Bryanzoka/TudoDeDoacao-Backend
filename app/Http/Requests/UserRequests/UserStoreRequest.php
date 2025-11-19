@@ -28,7 +28,7 @@ class UserStoreRequest extends FormRequest
             'profile_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], 
             'password' => ['required', 'min:8', 'confirmed'],
             'location' => ['nullable'],
-            'code'=>['required', 'min:6']
+            //'code'=>['required', 'min:6']
         ];
     }
 }

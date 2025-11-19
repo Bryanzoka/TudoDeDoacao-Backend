@@ -9,7 +9,6 @@ use App\Http\Resources\UserResource;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\UnauthorizedException;
-use PhpParser\Lexer\TokenEmulator\ReadonlyFunctionTokenEmulator;
 
 class UserService implements IUserService
 {
@@ -32,19 +31,11 @@ class UserService implements IUserService
     }
     
     public function create(array $data)
-    {
-<<<<<<< Updated upstream
-        dd($verification = verificationCode::where('email', $data['email']));
-        
-        !$verification->validateCode($verification->code);
+    {   
+        $verification = verificationCode::where('email', '=', $data['email'])->first();
 
-=======
-        // dd(verificationCode::where('email', $data['email']))->first();
-        $verification = verificationCode::where('email', $data['email'])->first();
-        // dd($verification->validateCode($verification['code']));
-        $verification->validateCode($verification['code']);
-    
->>>>>>> Stashed changes
+        $verification->validateCode($data['code']);
+
         if (isset($data['profile_image'])) {
             $data['profile_image'] = $data['profile_image']->store('users', 'public');
         }
