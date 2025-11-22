@@ -2,10 +2,11 @@
 
 namespace App\Domain\Models;
 
+use App\Infrastructure\Models\UserModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Donation extends Model
+class DonationModel extends Model
 {
     use HasFactory;
 
@@ -25,6 +26,6 @@ class Donation extends Model
 
     public function favoritedByUsers()
     {
-        return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
+        return $this->belongsToMany(UserModel::class, 'favorites')->withTimestamps();
     }
 }

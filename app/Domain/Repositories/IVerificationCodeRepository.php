@@ -2,7 +2,7 @@
 
 namespace App\Domain\Repositories;
 
-use App\Domain\Models\VerificationCode;
+use App\Domain\Entities\VerificationCode;
 
 interface IVerificationCodeRepository
 {

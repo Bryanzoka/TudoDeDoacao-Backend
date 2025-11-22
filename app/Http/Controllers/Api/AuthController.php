@@ -2,45 +2,46 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Application\Contracts\IAuthService;
+use App\Application\Dtos\Users\LoginDto;
+use App\Application\Dtos\Users\LogoutDto;
+use App\Application\Dtos\Users\VerificationCodeDto;
+use App\Application\UseCases\Users\Login;
+use App\Application\UseCases\Users\Logout;
+use App\Application\UseCases\Users\SendVerificationCode;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\LoginRequest;
+use App\Http\Requests\Users\LogoutRequest;
+use App\Http\Requests\Users\VerificationCodeRequest;
 use Exception;
-use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    private readonly IAuthService $authService;
-
-    public function __construct(IAuthService $authService)
-    {
-        $this->authService = $authService;
-    }
-    
-    public function login(Request $request)
+    public function login(LoginRequest $request, Login $useCase)
     {   
+        $data = $request->validated();
         try {
-            $credentials = $request->only('email','password');
-            $token = $this->authService->generateToken($credentials);
+            $dto = LoginDto::create($data['email'], $data['password']);
 
-            return response()->json(['token' => $token]);
+            $tokens = $useCase->handle($dto);
+
+            return response()->json(['acess_token' => $tokens['acess_token'], 'refresh_token' => $tokens['refresh_token']], 200);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
 
-    public function logout()
+    public function logout(LogoutRequest $request, Logout $useCase)
     {
-        $this->authService->logout();
-
+        $data = $request->validated();
+        $useCase->handle(LogoutDto::create($data['token']));
         return response()->json(null, 204);
-    }
+    }   
 
-    public function requestCode(Request $request)
+    public function requestCode(VerificationCodeRequest $request, SendVerificationCode $useCase)
     {   
+        $data = $request->validated();
         try {
-            $email = $request->validate(['email' => 'required|email']);
-            $this->authService->requestVerificationCode($email['email']);
+            $useCase->handle(VerificationCodeDto::create($data['email']));
             return response()->json(null, 204);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage());

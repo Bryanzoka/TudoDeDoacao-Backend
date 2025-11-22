@@ -2,70 +2,97 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Application\Dtos\Users\CreateUserDto;
+use App\Application\Dtos\Users\UpdateUserDto;
+use App\Application\UseCases\Users\CreateUser;
+use App\Application\UseCases\Users\GetAll;
+use App\Application\UseCases\Users\GetById;
 use App\Http\Controllers\Controller;
-use App\Application\Contracts\IUserService;
-use App\Http\Requests\UserRequests\UserStoreRequest;
-use App\Http\Requests\UserRequests\UserUpdateRequest;
+use App\Application\UseCases\Users\Update;
+use App\Application\UseCases\Users\Delete;
+use App\Http\Requests\Users\UserStoreRequest;
+use App\Http\Requests\Users\UserUpdateRequest;
+use App\Http\Resources\UserResource;
 use Exception;
 use Illuminate\Routing\Attributes\Middleware;
 
 class UserController extends Controller
 {
-    private readonly IUserService $userService;
-
-    public function __construct(IUserService $userService)
-    {
-        $this->userService = $userService;
-    }
-
     #[Middleware('role')]
-    public function index()
+    public function index(GetAll $useCase)
     {
         try {
-            $users = $this->userService->getAll();
-            return response()->json(['users' => $users], 200);
+            $users = $useCase->handle();
+            return response()->json(['users' => UserResource::collection($users)], 200);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
 
-    public function store(UserStoreRequest $request)
+    public function store(UserStoreRequest $request, CreateUser $useCase)
     {
-        dd($request);
+        $data = $request->validated();
         try {
-            $user = $this->userService->create($request->validated());
-            return response()->json(['user' => $user], 201); 
-        } catch (Exception $ex) {
-            return response()->json($ex->getMessage(), $ex->getCode());
-        }
+            $dto = CreateUserDto::create(
+                $data['name'],
+                $data['email'],
+                $data['phone'],
+                $data['password'],
+                $data['location'],
+                'user',
+                $request->file('profile_image'),
+                $data['code']
+            );
+            
+            $id = $useCase->handle($dto);
 
-    }
-
-    #[Middleware('role')]
-    public function show(int $id)
-    {
-        try {
-            return $this->userService->getById($id, (int)auth()->id());
+            return response()->json(['user' => $id], 201);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
 
     #[Middleware('role')]
-    public function update(UserUpdateRequest $request, int $id)
+    public function show(int $id, GetById $useCase)
     {
         try {
-            return $this->userService->update($request->validated(), $id, (int)auth()->id());
+            return response()->json(['user' => new UserResource($useCase->handle($id))], 200);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
 
     #[Middleware('role')]
-    public function destroy(int $id)
+    public function update(UserUpdateRequest $request, int $id, Update $useCase)
+    {
+        $data = $request->validated();
+        try {
+            $dto = UpdateUserDto::create(
+                $id,
+                $data['name'] ?? null,
+                $data['email'] ?? null,
+                $data['phone'] ?? null,
+                $data['password'] ?? null,
+                $data['location'] ?? null,
+                $request->profile_image
+            );
+
+            $useCase->handle($dto);
+            
+            return response()->json(null, 204);
+        } catch (Exception $ex) {
+            if ($ex->getCode() == 0) {
+                return response()->json($ex->getMessage(), 400);
+            }
+            return response()->json($ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    #[Middleware('role')]
+    public function destroy(int $id, Delete $useCase)
     {
         try {
-            $this->userService->delete($id, (int)auth()->id());
+            $useCase->handle($id);
             return response(null, 204);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
