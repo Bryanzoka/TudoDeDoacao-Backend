@@ -17,7 +17,7 @@ class RoleMiddleware
     {
         $id = $request->route('id');
         $tokenId = auth()->id();
-        $role = auth()->user()->getJWTCustomClaims();
+        $role = auth()->user()->getJWTCustomClaims()['role'] ?? null;
 
         if ($id != $tokenId && $role !== 'admin') {
             return response()->json('invalid authorization', 401);

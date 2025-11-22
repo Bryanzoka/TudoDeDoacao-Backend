@@ -1,16 +1,19 @@
 <?php
 
-namespace App\Domain\Models;
+namespace App\Infrastructure\Models;
 
+use App\Domain\Models\DonationModel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject, MustVerifyEmail
+class UserModel extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use HasFactory, Notifiable;
+
+    protected $table = 'users';
 
     protected $fillable = [
         'name',
@@ -33,7 +36,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function favoriteDonations()
     {
-        return $this->belongsToMany(Donation::class, 'favorites')->withTimestamps();
+        return $this->belongsToMany(DonationModel::class, 'favorites')->withTimestamps();
     }
 
     public function getJWTIdentifier()
