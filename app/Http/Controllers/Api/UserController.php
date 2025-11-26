@@ -80,6 +80,9 @@ class UserController extends Controller
             
             return response()->json(null, 204);
         } catch (Exception $ex) {
+            if ($ex->getCode() == 0) {
+                return response()->json($ex->getMessage(), 400);
+            }
             return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
