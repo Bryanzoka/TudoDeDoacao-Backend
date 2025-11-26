@@ -14,12 +14,9 @@ use App\Http\Requests\Users\UserStoreRequest;
 use App\Http\Requests\Users\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use Exception;
-use Illuminate\Routing\Attributes\Middleware;
 
 class UserController extends Controller
 {
-    #[Middleware('jwt.auth')]
-    #[Middleware('role')]
     public function index(GetAll $useCase)
     {
         try {
@@ -51,8 +48,6 @@ class UserController extends Controller
         }
     }
 
-    #[Middleware('jwt.auth')]
-    #[Middleware('role')]
     public function show(int $id, GetById $useCase)
     {
         try {
@@ -62,8 +57,6 @@ class UserController extends Controller
         }
     }
 
-    #[Middleware('jwt.auth')]
-    #[Middleware('role')]
     public function update(UserUpdateRequest $request, int $id, Update $useCase)
     {
         $data = $request->validated();
@@ -84,8 +77,6 @@ class UserController extends Controller
         }
     }
 
-    #[Middleware('jwt.auth')]
-    #[Middleware('role')]
     public function destroy(int $id, Delete $useCase)
     {
         try {
