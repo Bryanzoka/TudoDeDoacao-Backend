@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use app\Application\Contracts\IDonationService;
+use App\Application\Dtos\Donations\CreateDonationDto;
+use App\Application\UseCases\Donations\Update;
+use App\Application\UseCases\Donations\Delete;
+use App\Application\Dtos\Donations\UpdateDonationDto;
+use App\Application\UseCases\Donations\CreateDonation;
+use App\Application\UseCases\Users\GetById;
 use App\Domain\Models\Donation;
+use App\Application\UseCases\Donations\GetAll;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DonationRequests\DonationRequest;
+use App\Http\Requests\DonationRequests\DonationStoreRequest;
 use App\Http\Requests\DonationRequests\DonationUpdateRequest;
 use App\Http\Resources\DonationResource;
 use Exception;
@@ -13,61 +19,64 @@ use Illuminate\Support\Facades\Storage;
 
 class DonationController extends Controller
 {
-    private readonly IDonationService $donationService;
 
-    public function __construct(IDonationService $donationService)
-    {
-        $this->donationService = $donationService;
-    }
-
-    public function index()
+    public function index(GetAll $useCase)
     {
         try {
-            $donations = $this->donationService->getAll(); 
-            return response()->json(['donations'=> $donations], 200);
+            $donations = $useCase->handle();
+            return response()->json(['donations' => DonationResource::collection($donations)], 200);
         } catch(Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
 
-    public function store(DonationRequest $request)
+    public function store(DonationStoreRequest $request, CreateDonation $useCase)
     {
+        $data = $request->validated();
         try {
-            $res = $this->donationService->create($request->validated());
-            return response()->json(['donation' => $res], 201);
+            $id = $useCase->handle(CreateDonationDto::create(
+                $data['user_id'],
+                $data['name'],
+                $data['description'],
+                $data['category'],
+                $request->image,
+                $data['location']
+            ));
+
+            return response()->json(['id' => $id], 201);
         } catch(Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
-        // $donation = Donation::create($data);
-        // $donation->search_name = strtolower(str::ascii($donation->name));
-        // $donation->save();
-        // return new DonationResource($donation);
     }
 
-    public function show(Donation $donation)
+    public function show(int $id, GetById $useCase)
     {
-        return new DonationResource($donation);
+        try {
+            return response()->json(['donation' => new DonationResource($useCase->handle($id))], 200);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
+        }
     }
 
     //Insert _method = PATCH in form-data POST requests to update the image and its other attributes
-    public function update(DonationUpdateRequest $request, Donation $donation)
+    public function update(DonationUpdateRequest $request, int $id, Update $useCase)
     {
-        if (auth()->id() != $donation->user_id) {
-            return response()->json(['message' => 'invalid operation, mismatched credentials'], 401);
+        $data = $request->validated();
+        try {
+            $useCase->handle(UpdateDonationDto::create(
+                $id,
+                $data['name'],
+                $data['description'],
+                $data['category'],
+                $request->image,
+                $data['location'],
+                $data['status']
+            ));
+
+            return response()->json(null, 204);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
         }
-
-        $donation = $this->donationService->update($request->validated(), $donation->id(), auth()->id());
-
-        if ($request->hasFile('image')) {
-            if ($donation->image && Storage::disk('public')->exists($donation->image)) {
-                Storage::disk('public')->delete($donation->image);
-            }
-
-            $path = $request->file('image')->store('donations', 'public');
-            $donation->image = $path;
-        }
-        $donation->save();
-        return new DonationResource($donation);
     }
 
     public function getByUser($id)
@@ -139,17 +148,13 @@ class DonationController extends Controller
         return DonationResource::collection($donations);
     }
     
-    public function destroy(Donation $donation)
+    public function destroy(int $id, Delete $useCase)
     {
-        if (auth()->id() != $donation->user_id) {
-            return response()->json(['message' => 'invalid operation, mismatched credentials'], 401);
+        try {
+            $useCase->handle($id);
+            return response()->json(null, 204);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
         }
-
-        if ($donation->image && Storage::disk('public')->exists($donation->image)) {
-            Storage::disk('public')->delete($donation->image);
-        }
-
-        $donation->delete();
-        return response(null, 204);
     }
 }

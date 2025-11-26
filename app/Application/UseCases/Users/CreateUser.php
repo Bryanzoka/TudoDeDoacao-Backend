@@ -41,7 +41,6 @@ class CreateUser
         $this->codeRepository->delete($code);
         
         return $this->userRepository->create(User::create(
-            null,
             $dto->name,
             $dto->email,
             $dto->phone,

@@ -10,17 +10,16 @@ class UserRepository implements IUserRepository
 {
     public function getAll(): array
     {
-        return UserModel::all()
-            ->map(fn($m) => User::create(                
-                $m->id,
-                $m->name,
-                $m->email,
-                $m->phone,
-                $m->profile_image,
-                $m->password,
-                $m->location,
-                $m->role))
-            ->toArray();
+        return UserModel::all()->map(fn($m) => User::restore(                
+            $m->id,
+            $m->name,
+            $m->email,
+            $m->phone,
+            $m->profile_image,
+            $m->password,
+            $m->location,
+            $m->role
+        ))->toArray();
     }
 
     public function getById(int $id): ?User
@@ -31,7 +30,7 @@ class UserRepository implements IUserRepository
             return null;
         }
 
-        return User::create($user->id,
+        return User::restore($user->id,
         $user->name, 
         $user->email, 
         $user->phone, 
@@ -50,7 +49,7 @@ class UserRepository implements IUserRepository
             return null;
         }
         
-        return User::create($user->id, 
+        return User::restore($user->id, 
         $user->name, 
         $user->email, 
         $user->phone, 

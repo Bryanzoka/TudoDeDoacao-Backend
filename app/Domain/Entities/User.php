@@ -25,9 +25,9 @@ class User
         $this->role = $role;
     }
 
-    public static function create(?int $id, string $name, string $email, string $phone, ?string $profileImage, string $password, string $location, string $role)
+    public static function create(string $name, string $email, string $phone, ?string $profileImage, string $password, string $location, string $role)
     {
-        return new self($id, $name, $email, $phone,  $profileImage, $password, $location, $role);
+        return new self(null, $name, $email, $phone,  $profileImage, $password, $location, $role);
     }
 
     public function update(string $name, string $email, string $phone, ?string $profileImage, string $password, string $location)
@@ -38,6 +38,11 @@ class User
         $this->profileImage = $profileImage;
         $this->password = $password;
         $this->location = $location;
+    }
+
+    public static function restore(int $id, string $name, string $email, string $phone, ?string $profileImage, string $password, string $location, string $role)
+    {
+        return new self($id, $name, $email, $phone,  $profileImage, $password, $location, $role);
     }
 
     public function getId()
