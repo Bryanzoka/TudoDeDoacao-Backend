@@ -6,10 +6,20 @@ use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('/users', UserController::class)->except([
+/* Route::apiResource('/users', UserController::class)->except([
     'create',
     'edit'
-]);
+]); */
+
+Route::post('users', [UserController::class, 'store']);
+
+Route::middleware(['jwt.auth', 'role'])->group(function() {
+    Route::get('users', [UserController::class, 'index']);
+    Route::get('users/{id}', [UserController::class, 'show']);
+    Route::post('auth/refresh', [AuthController::class, 'refresh']);
+    Route::patch('users/{id}', [UserController::class, 'update']);
+    Route::delete('users/{id}', [UserController::class, 'destroy']);
+});
 
 Route::post('/auth/request-verification-code', [AuthController::class, 'requestCode']);
 

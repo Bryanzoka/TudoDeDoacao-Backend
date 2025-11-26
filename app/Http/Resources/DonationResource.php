@@ -15,17 +15,15 @@ class DonationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'brief_description' => $this->brief_description,
-            'category' => $this->category,
-            'image' => $this->image,
-            'location' => $this->location,
-            'status' => $this->status,
-            'created_at' => $this->created_at,  
-            'updated_at' => $this->updated_at, 
+            'id' => $this->getId(),
+            'user_id' => $this->getUserId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'brief_description' => $this->getBriefDescription(),
+            'category' => $this->getCategory(),
+            'image' => $this->getImage(),
+            'location' => $this->getLocation(),
+            'status' => $this->getStatus()
         ];
     }
 }

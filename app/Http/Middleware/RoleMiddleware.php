@@ -15,12 +15,18 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $id = $request->route('id');
-        $tokenId = auth()->id();
-        $role = auth()->user()->getJWTCustomClaims()['role'] ?? null;
+        $routeId = (int) $request->route('id');
+        $user = auth()->user();
 
-        if ($id != $tokenId && $role !== 'admin') {
-            return response()->json('invalid authorization', 401);
+        if (!$user) {
+            return response()->json('not authenticated', 401);
+        }
+
+        $tokenId = $user->id;
+        $role = $user->getJWTCustomClaims()['role'] ?? null;
+
+        if ($routeId !== $tokenId && $role !== 'admin') {
+            return response()->json('invalid authorization', 403);
         }
 
         return $next($request);

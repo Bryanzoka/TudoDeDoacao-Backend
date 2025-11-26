@@ -2,13 +2,13 @@
 
 namespace App\Domain\Repositories;
 
-use App\Domain\Models\Donation;
+use App\Domain\Entities\Donation;
 
 interface IDonationRepository
 {
-    public function getAll();
-    public function getById(int $id);
-    public function create(Donation $donation);
-    public function update(Donation $donation);
-    public function delete(Donation $donation);
+    public function getAll(): array;
+    public function getById(int $id): ?Donation;
+    public function create(Donation $donation): int;
+    public function update(Donation $donation): void;
+    public function delete(Donation $donation): void;
 }

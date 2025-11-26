@@ -18,6 +18,7 @@ use Illuminate\Routing\Attributes\Middleware;
 
 class UserController extends Controller
 {
+    #[Middleware('jwt.auth')]
     #[Middleware('role')]
     public function index(GetAll $useCase)
     {
@@ -33,7 +34,7 @@ class UserController extends Controller
     {
         $data = $request->validated();
         try {
-            $dto = CreateUserDto::create(
+            $id = $useCase->handle(CreateUserDto::create(
                 $data['name'],
                 $data['email'],
                 $data['phone'],
@@ -42,9 +43,7 @@ class UserController extends Controller
                 'user',
                 $request->file('profile_image'),
                 $data['code']
-            );
-            
-            $id = $useCase->handle($dto);
+            ));
 
             return response()->json(['user' => $id], 201);
         } catch (Exception $ex) {
@@ -52,6 +51,7 @@ class UserController extends Controller
         }
     }
 
+    #[Middleware('jwt.auth')]
     #[Middleware('role')]
     public function show(int $id, GetById $useCase)
     {
@@ -62,22 +62,21 @@ class UserController extends Controller
         }
     }
 
+    #[Middleware('jwt.auth')]
     #[Middleware('role')]
     public function update(UserUpdateRequest $request, int $id, Update $useCase)
     {
         $data = $request->validated();
         try {
-            $dto = UpdateUserDto::create(
+            $useCase->handle(UpdateUserDto::create(
                 $id,
                 $data['name'] ?? null,
                 $data['email'] ?? null,
                 $data['phone'] ?? null,
                 $data['password'] ?? null,
                 $data['location'] ?? null,
-                $request->profile_image
-            );
-
-            $useCase->handle($dto);
+                $request->profile_image ?? null
+            ));
             
             return response()->json(null, 204);
         } catch (Exception $ex) {
@@ -88,6 +87,7 @@ class UserController extends Controller
         }
     }
 
+    #[Middleware('jwt.auth')]
     #[Middleware('role')]
     public function destroy(int $id, Delete $useCase)
     {
