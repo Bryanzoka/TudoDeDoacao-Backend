@@ -3,6 +3,7 @@
 namespace App\Domain\Entities;
 
 use DateTimeImmutable;
+use Exception;
 
 class RefreshToken
 {
@@ -19,9 +20,23 @@ class RefreshToken
         $this->expiresAt = $expiresAt;
     }
 
-    public static function create(?int $id, int $userId, string $token)
+    public static function create(int $userId)
     {
-        return new self($id, $userId, $token, new DateTimeImmutable('+7 days'));
+        return new self(null, $userId, bin2hex(random_bytes(64)), new DateTimeImmutable('+7 days'));
+    }
+
+    public function refresh()
+    {
+        if ($this->expiresAt < new DateTimeImmutable()) {
+            throw new Exception('token expired');
+        }
+
+        return new self(null, $this->userId, bin2hex(random_bytes(64)), new DateTimeImmutable('+7 days'));
+    }
+
+    public static function restore(int $id, int $userId, string $token, DateTimeImmutable $expiresAt)
+    {
+        return new self($id, $userId, $token, $expiresAt);
     }
 
     public function isExpired()
