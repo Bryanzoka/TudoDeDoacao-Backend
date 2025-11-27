@@ -7,7 +7,6 @@ use App\Domain\Entities\RefreshToken;
 use App\Domain\Repositories\IRefreshTokenRepository;
 use App\Domain\Repositories\IUserRepository;
 use Exception;
-use Str;
 
 class Login
 {
@@ -28,7 +27,8 @@ class Login
             throw new Exception('invalid credentials', 401);
         }
 
-        $refreshToken = RefreshToken::create(null, $user->getId(), Str::random(64));
+        $refreshToken = RefreshToken::create($user->getId());
+        $this->tokenRepository->create($refreshToken);
 
         return [
             'acess_token' => $acessToken,

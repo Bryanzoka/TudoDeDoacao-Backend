@@ -8,6 +8,8 @@ use Carbon\Carbon;
 
 class RefreshTokenModel extends Model
 {
+    protected $table = 'refresh_tokens';
+    
     protected $fillable = [
         'id',
         'user_id',

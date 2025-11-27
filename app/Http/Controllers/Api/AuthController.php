@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Application\Dtos\Users\LoginDto;
 use App\Application\Dtos\Users\LogoutDto;
 use App\Application\Dtos\Users\VerificationCodeDto;
+use App\Http\Requests\Users\RefreshRequest;
+use App\Application\UseCases\Users\RefreshToken;
 use App\Application\UseCases\Users\Login;
 use App\Application\UseCases\Users\Logout;
 use App\Application\UseCases\Users\SendVerificationCode;
@@ -20,10 +22,19 @@ class AuthController extends Controller
     {   
         $data = $request->validated();
         try {
-            $dto = LoginDto::create($data['email'], $data['password']);
+            $tokens = $useCase->handle(LoginDto::create($data['email'], $data['password']));
 
-            $tokens = $useCase->handle($dto);
+            return response()->json(['acess_token' => $tokens['acess_token'], 'refresh_token' => $tokens['refresh_token']], 200);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
+        }
+    }
 
+    public function refresh(RefreshRequest $request, RefreshToken $useCase)
+    {
+        $data = $request->validated();
+        try {
+            $tokens = $useCase->handle($data['token']);
             return response()->json(['acess_token' => $tokens['acess_token'], 'refresh_token' => $tokens['refresh_token']], 200);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
