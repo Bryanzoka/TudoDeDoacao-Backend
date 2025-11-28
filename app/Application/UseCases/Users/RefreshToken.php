@@ -29,13 +29,13 @@ class RefreshToken
             throw new Exception($ex->getMessage(), 400);
         }
         
-        $acessToken = JWTAuth::fromUser($userModel);
+        $accessToken = JWTAuth::fromUser($userModel);
 
         $this->tokenRepository->create($newToken);
         $this->tokenRepository->delete($token);
 
         return [
-            'acess_token' => $acessToken,
+            'access_token' => $accessToken,
             'refresh_token' => $newToken->getToken()
         ];
     }

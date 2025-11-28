@@ -22,7 +22,7 @@ class VerificationCodeRepository implements IVerificationCodeRepository
 
     public function save(VerificationCode $code)
     {
-        return VerificationCodeModel::create([
+        VerificationCodeModel::create([
             'email' => $code->getEmail(),
             'code' => $code->getCode(),
             'expires_at' => $code->getExpiresAt()->format('Y-m-d H:i:s')

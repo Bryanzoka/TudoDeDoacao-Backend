@@ -23,7 +23,7 @@ class Login
     {
         $user = $this->userRepository->getByEmail($dto->email) ?? throw new Exception('user not found with this email', 404);
 
-        if (!$acessToken = auth()->attempt((array)$dto)) {
+        if (!$accessToken = auth()->attempt((array)$dto)) {
             throw new Exception('invalid credentials', 401);
         }
 
@@ -31,7 +31,7 @@ class Login
         $this->tokenRepository->create($refreshToken);
 
         return [
-            'acess_token' => $acessToken,
+            'access_token' => $accessToken,
             'refresh_token' => $refreshToken->getToken()
         ];
     }

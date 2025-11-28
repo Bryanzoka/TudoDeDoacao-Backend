@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\DonationRequests;
+namespace App\Http\Requests\Donations;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,8 +23,9 @@ class DonationStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:2', 'max:70'],
+            'user_id' => ['required'],
             'description' => ['nullable', 'string', 'max:255'],
-            'category' => ['nullable', 'max:50'],
+            'category' => ['required', 'max:50'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], 
             'location' => ['required', 'string', 'max:100'],
         ];

@@ -24,7 +24,7 @@ class AuthController extends Controller
         try {
             $tokens = $useCase->handle(LoginDto::create($data['email'], $data['password']));
 
-            return response()->json(['acess_token' => $tokens['acess_token'], 'refresh_token' => $tokens['refresh_token']], 200);
+            return response()->json(['access_token' => $tokens['access_token'], 'refresh_token' => $tokens['refresh_token']], 200);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
@@ -35,7 +35,7 @@ class AuthController extends Controller
         $data = $request->validated();
         try {
             $tokens = $useCase->handle($data['token']);
-            return response()->json(['acess_token' => $tokens['acess_token'], 'refresh_token' => $tokens['refresh_token']], 200);
+            return response()->json(['access_token' => $tokens['access_token'], 'refresh_token' => $tokens['refresh_token']], 200);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }

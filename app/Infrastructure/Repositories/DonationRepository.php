@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Infrastructure\Repositories;
+namespace App\Infrastructure\Repositories;
 
 use App\Domain\Entities\Donation;
 use App\Infrastructure\Models\DonationModel;
@@ -24,16 +24,43 @@ class DonationRepository implements IDonationRepository
         ))->toArray();
     }
 
-    public function getById(int $id): Donation
+    public function getById(int $id): ?Donation
     {
         $model = DonationModel::where('id', '=', $id)->first();
+
+        if (!$model) {
+            return null;
+        }
+
         return Donation::restore(
             $model->id,
-            $model->userId,
+            $model->user_id,
             $model->name,
-            $model->searchName,
+            $model->search_name,
             $model->description,
-            $model->briefDescription,
+            $model->brief_description,
+            $model->category,
+            $model->image,
+            $model->location,
+            $model->status
+        );
+    }
+
+    public function getByUserId(int $userId): ?Donation
+    {
+        $model = DonationModel::where('user_id', '=', $userId)->first();
+
+        if (!$model) {
+            return null;
+        }
+
+        return Donation::restore(
+            $model->id,
+            $model->user_id,
+            $model->name,
+            $model->search_name,
+            $model->description,
+            $model->brief_description,
             $model->category,
             $model->image,
             $model->location,
@@ -58,7 +85,7 @@ class DonationRepository implements IDonationRepository
 
     public function update(Donation $donation): void
     {
-        DonationModel::update([
+        DonationModel::where('id', '=', $donation->getId())->update([
             'name' => $donation->getName(),
             'search_name' => $donation->getSearchName(),
             'description' => $donation->getDescription(),
