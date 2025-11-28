@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\DonationRequests;
+namespace App\Http\Requests\Donations;
 use Illuminate\Validation\Rules\Enum;
 use App\Domain\ValueObjects\DonationStatus;
 

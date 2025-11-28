@@ -7,12 +7,13 @@ use App\Application\UseCases\Donations\Update;
 use App\Application\UseCases\Donations\Delete;
 use App\Application\Dtos\Donations\UpdateDonationDto;
 use App\Application\UseCases\Donations\CreateDonation;
-use App\Application\UseCases\Users\GetById;
+use App\Application\UseCases\Donations\GetById;
+use App\Application\UseCases\Donations\GetByUserId;
 use App\Domain\Models\Donation;
 use App\Application\UseCases\Donations\GetAll;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DonationRequests\DonationStoreRequest;
-use App\Http\Requests\DonationRequests\DonationUpdateRequest;
+use App\Http\Requests\Donations\DonationStoreRequest;
+use App\Http\Requests\Donations\DonationUpdateRequest;
 use App\Http\Resources\DonationResource;
 use Exception;
 
@@ -35,10 +36,11 @@ class DonationController extends Controller
         try {
             $id = $useCase->handle(CreateDonationDto::create(
                 $data['user_id'],
+                auth()->id(),
                 $data['name'],
-                $data['description'],
+                $data['description'] ?? null,
                 $data['category'],
-                $request->image,
+                $request->image ?? null,
                 $data['location']
             ));
 
@@ -64,12 +66,13 @@ class DonationController extends Controller
         try {
             $useCase->handle(UpdateDonationDto::create(
                 $id,
-                $data['name'],
-                $data['description'],
-                $data['category'],
-                $request->image,
-                $data['location'],
-                $data['status']
+                auth()->id(),
+                $data['name'] ?? null,
+                $data['description'] ?? null,
+                $data['category'] ?? null,
+                $request->image ?? null,
+                $data['location'] ?? null,
+                $data['status'] ?? null
             ));
 
             return response()->json(null, 204);
@@ -78,15 +81,13 @@ class DonationController extends Controller
         }
     }
 
-    public function getByUser($id)
+    public function getByUser(int $userId, GetByUserId $useCase)
     {
-        $donations = Donation::where('user_id', '=', $id)->get();
-
-        if ($donations->isEmpty()) {
-            return response()->json(['message' => 'donations not found'], 404);
+        try {
+            return response()->json(['donation' => new DonationResource($useCase->handle($userId))], 200);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
         }
-
-        return DonationResource::collection($donations);
     }
 
     public function getByName($name)

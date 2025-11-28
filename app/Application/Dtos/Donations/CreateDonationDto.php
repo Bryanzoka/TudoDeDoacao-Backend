@@ -7,15 +7,17 @@ use Illuminate\Http\UploadedFile;
 class CreateDonationDto
 {
     public int $userId;
+    public int $authId;
     public string $name;
-    public string $description;
-    public string $category;
+    public ?string $description;
+    public ?string $category;
     public ?UploadedFile $image;
     public string $location;
 
-    private function __construct(int $userId, string $name, string $description, string $category, ?UploadedFile $image, string $location)
+    private function __construct(int $userId, int $authId, string $name, ?string $description, ?string $category, ?UploadedFile $image, string $location)
     {
         $this->userId = $userId;
+        $this->authId = $authId;
         $this->name = $name;
         $this->description = $description;
         $this->category = $category;
@@ -23,8 +25,8 @@ class CreateDonationDto
         $this->location = $location;
     }
 
-    public static function create(int $userId, string $name, string $description, string $category, ?UploadedFile $image, string $location)
+    public static function create(int $userId, int $authId, string $name, ?string $description, ?string $category, ?UploadedFile $image, string $location)
     {
-        return new self($userId, $name, $description, $category, $image, $location);
+        return new self($userId, $authId, $name, $description, $category, $image, $location);
     }
 }

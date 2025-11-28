@@ -25,6 +25,14 @@ class CreateDonation
             throw new Exception('user does not exist', 400);
         }
 
+        if ($dto->userId != $dto->authId) {
+            $user = $this->userRepository->getById($dto->authId) ?? throw new Exception('user not found');
+            
+            if ($user->getRole() !== 'admin') {
+                throw new Exception('invalid authorization', 403);
+            }
+        }
+
         $imagePath = null;
 
         if ($dto->image) {

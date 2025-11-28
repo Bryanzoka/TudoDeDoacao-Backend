@@ -16,7 +16,7 @@ class RefreshTokenRepository implements IRefreshTokenRepository
             $m->user_id,
             $m->token,
             new DateTimeImmutable($m->expires_at)
-        ));
+        ))->toArray();
     }
 
     public function getById(int $id): ?RefreshToken
@@ -56,7 +56,7 @@ class RefreshTokenRepository implements IRefreshTokenRepository
         RefreshTokenModel::create([
             'user_id' => $token->getUserId(),
             'token' => $token->getToken(),
-            'expires_at' => $token->getExpiresAt()
+            'expires_at' => $token->getExpiresAt()->format('Y-m-d H:i:s')
         ]);
     }
 
