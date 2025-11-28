@@ -24,6 +24,22 @@ class DonationRepository implements IDonationRepository
         ))->toArray();
     }
 
+    public function getAllByUserId(int $userId): array
+    {
+        return DonationModel::where('user_id', '=', $userId)->get()->map(fn($m) => Donation::restore(                
+            $m->id,
+            $m->user_id,
+            $m->name,
+            $m->search_name,
+            $m->description,
+            $m->brief_description,
+            $m->category,
+            $m->image,
+            $m->location,
+            $m->status
+        ))->toArray();
+    }
+
     public function getById(int $id): ?Donation
     {
         $model = DonationModel::where('id', '=', $id)->first();

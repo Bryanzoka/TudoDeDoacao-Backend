@@ -151,7 +151,7 @@ class DonationController extends Controller
     public function destroy(int $id, Delete $useCase)
     {
         try {
-            $useCase->handle($id);
+            $useCase->handle($id, auth()->id());
             return response()->json(null, 204);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
