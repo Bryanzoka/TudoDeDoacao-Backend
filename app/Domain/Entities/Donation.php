@@ -10,7 +10,7 @@ class Donation
     private string $searchName;
     private ?string $description;
     private ?string $briefDescription;
-    private string $category;
+    private ?string $category;
     private ?string $image;
     private string $location;
     private string $status;
@@ -41,7 +41,7 @@ class Donation
         return new self(null, $userId, $name, $searchName, $description, $briefDescription, $category, $image, $location, 'active');
     }
 
-    public function update(string $name, ?string $description, string $category, ?string $image, string $location, string $status)
+    public function update(string $name, ?string $description, ?string $category, ?string $image, ?string $location, ?string $status)
     {
         $searchName = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $name));
         $briefDescription = null;
