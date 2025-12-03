@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Application\Dtos\Donations\CreateDonationDto;
+use App\Application\Dtos\Donations\GetFilteredDonationDto;
+use App\Application\UseCases\Donations\GetFiltered;
 use App\Application\UseCases\Donations\Update;
 use App\Application\UseCases\Donations\Delete;
 use App\Application\Dtos\Donations\UpdateDonationDto;
@@ -14,6 +16,7 @@ use App\Application\UseCases\Donations\GetAll;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Donations\DonationStoreRequest;
 use App\Http\Requests\Donations\DonationUpdateRequest;
+use App\Http\Requests\Donations\GetFilteredRequest;
 use App\Http\Resources\DonationResource;
 use Exception;
 
@@ -76,6 +79,25 @@ class DonationController extends Controller
             ));
 
             return response()->json(null, 204);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    public function getFiltered(GetFilteredRequest $request, GetFiltered $useCase)
+    {
+        $request->validated();
+        try {
+            $donations = $useCase->handle(GetFilteredDonationDto::create(
+                $request->query('name') ?? null,
+                $request->query('category') ?? null,
+                $request->query('location') ?? null,
+                $request->query('status') ?? null,
+                $request->query('limit', 30),
+                $request->query('offset', 0),
+            ));
+
+            return response()->json(['donations' => DonationResource::collection($donations)], 200);
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }

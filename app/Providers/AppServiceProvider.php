@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Application\Contracts\IEmailService;
 use App\Domain\Repositories\IDonationRepository;
+use App\Domain\Repositories\IMessageRepository;
 use App\Domain\Repositories\IRefreshTokenRepository;
 use App\Domain\Repositories\IVerificationCodeRepository;
 use App\Infrastructure\Repositories\DonationRepository;
+use App\Infrastructure\Repositories\MessageRepository;
 use App\Infrastructure\Repositories\RefreshTokenRepository;
 use App\Infrastructure\Repositories\VerificationCodeRepository;
 use App\Infrastructure\Services\EmailService;
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IEmailService::class, EmailService::class);
         $this->app->bind(IVerificationCodeRepository::class, VerificationCodeRepository::class);
         $this->app->bind(IDonationRepository::class, DonationRepository::class);
+        $this->app->bind(IMessageRepository::class, MessageRepository::class);
     }
 
     /**
