@@ -84,6 +84,34 @@ class DonationRepository implements IDonationRepository
         );
     }
 
+    public function getFiltered(?string $name, ?string $category, ?string $location, ?string $status, int $limit = 30, int $offset = 0): array
+    {
+        $query = DonationModel::query();
+
+        $query->when($name, fn($q) => $q->where('search_name', 'like', '%' . $name . '%'));
+
+        $query->when($category, fn($q) => $q->where('category', $category));
+
+        $query->when($location, fn($q) => $q->where('location', $location));
+
+        $query->when($status, fn($q) => $q->where('status', $status));
+
+        $models = $query->limit($limit)->offset($offset)->get();
+
+        return $models->map(fn($m) => Donation::restore(
+            $m->id,
+            $m->user_id,
+            $m->name,
+            $m->search_name,
+            $m->description,
+            $m->brief_description,
+            $m->category,
+            $m->image,
+            $m->location,
+            $m->status,
+        ))->toArray();
+    }
+
     public function create(Donation $donation): int
     {
         return DonationModel::create([
