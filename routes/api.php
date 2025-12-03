@@ -43,7 +43,7 @@ Route::apiResource('/donations', DonationController::class)->except([
         Route::get('/donations/favorites', [FavoriteController::class, 'myFavorites']);
         Route::post('/donations/favorites/{donation}', [FavoriteController::class, 'favorite']);
         Route::delete('/donations/favorites/{donation}', [FavoriteController::class, 'unfavorite']);
-        Route::get('/donations/search', [DonationController::class, 'getFiltered']);
+        Route::get('/donations', [DonationController::class, 'getFiltered']);
 
     Route::get('/messages', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);
