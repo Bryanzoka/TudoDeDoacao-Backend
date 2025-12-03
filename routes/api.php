@@ -23,6 +23,7 @@ Route::middleware(['jwt.auth', 'role'])->group(function() {
     Route::delete('users/{id}', [UserController::class, 'destroy']);
 });
 
+Route::get('/donations/search', [DonationController::class, 'getFiltered']);
 Route::apiResource('/donations', DonationController::class)->except([
     'create',
     'edit'
