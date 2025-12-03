@@ -27,23 +27,24 @@ Route::get('/donations/search', [DonationController::class, 'getFiltered']);
 Route::apiResource('/donations', DonationController::class)->except([
     'create',
     'edit'
-])->middleware('jwt.auth');
-
-
-Route::post('/auth/request-verification-code', [AuthController::class, 'requestCode']);
-
-Route::get('/donations/location/{location}', [DonationController::class, 'getByLocation']);
-
-Route::get('/donations/category/{category}', [DonationController::class, 'getByCategory']);
-
-Route::get('/donations/search/{name}', [DonationController::class, 'getByName']);
-
-Route::middleware('jwt.auth')->group(function() {
-    Route::get('/users/{id}/donations', [DonationController::class, 'getByUser']);
-    Route::get('/donations/location', [DonationController::class, 'getByMyLocation']);
-    Route::get('/donations/favorites', [FavoriteController::class, 'myFavorites']);
-    Route::post('/donations/favorites/{donation}', [FavoriteController::class, 'favorite']);
-    Route::delete('/donations/favorites/{donation}', [FavoriteController::class, 'unfavorite']);
+    ])->middleware('jwt.auth');
+    
+    
+    Route::post('/auth/request-verification-code', [AuthController::class, 'requestCode']);
+    
+    Route::get('/donations/location/{location}', [DonationController::class, 'getByLocation']);
+    
+    Route::get('/donations/category/{category}', [DonationController::class, 'getByCategory']);
+    
+    Route::get('/donations/search/{name}', [DonationController::class, 'getByName']);
+    
+    Route::middleware('jwt.auth')->group(function() {
+        Route::get('/users/{id}/donations', [DonationController::class, 'getByUser']);
+        Route::get('/donations/location', [DonationController::class, 'getByMyLocation']);
+        Route::get('/donations/favorites', [FavoriteController::class, 'myFavorites']);
+        Route::post('/donations/favorites/{donation}', [FavoriteController::class, 'favorite']);
+        Route::delete('/donations/favorites/{donation}', [FavoriteController::class, 'unfavorite']);
+        Route::get('/donations', [DonationController::class, 'getFiltered']);
 
     Route::get('/messages', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);
