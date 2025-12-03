@@ -34,6 +34,7 @@ class UserModel extends Authenticatable implements JWTSubject, MustVerifyEmail
         'password' => 'hashed',
     ];
 
+    // BUSCAR DONATION PENDENTES
     public function favoriteDonations()
     {
         return $this->belongsToMany(DonationModel::class, 'favorites')->withTimestamps();

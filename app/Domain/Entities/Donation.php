@@ -64,7 +64,7 @@ class Donation
     {
         return new self($id, $userId, $name, $searchName, $description, $briefDescription, $category, $image, $location, $status);
     }
-
+    
     public function getId()
     {
         return $this->id;
