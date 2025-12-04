@@ -8,20 +8,16 @@ use App\Infrastructure\Models\PendingDonationModel;
 
 class PendingDonationRepository implements IPendingDonationRepository
 {
-    public function create(int $userId, int $donationId): int
+    public function create(PendingDonation $pendingDonation): int
     {
         return PendingDonationModel::create([
-            'user_id' => $userId,
-            'donation_id' => $donationId
+            'donation_id' => $pendingDonation->getDonationId(),
+            'user_id' => $pendingDonation->getUserId(),
         ])->id;
     }
 
-     public function update(PendingDonation $pendingDonation): void
+    public function delete(PendingDonation $pendingDonation): void
     {
-        PendingDonationModel::update([
-            'name' => $pendingDonation->getUserId(),
-            'search_name' => $pendingDonation->getDonationId(),
-        ]);
+        PendingDonationModel::where('user_id', '=', $pendingDonation->getUserId())->delete();
     }
-
 }

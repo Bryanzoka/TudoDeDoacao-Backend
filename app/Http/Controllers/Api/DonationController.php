@@ -18,6 +18,7 @@ use App\Http\Requests\Donations\DonationStoreRequest;
 use App\Http\Requests\Donations\DonationUpdateRequest;
 use App\Http\Requests\Donations\GetFilteredRequest;
 use App\Http\Resources\DonationResource;
+use App\Infrastructure\Models\DonationModel;
 use Exception;
 
 class DonationController extends Controller
@@ -115,7 +116,7 @@ class DonationController extends Controller
     public function getByName($name)
     {
         $firstWord = explode(' ', $name)[0];
-        $donations = Donation::where('search_name', 'like', '%' . strtolower($firstWord) . '%')->get();
+        $donations = DonationModel::where('search_name', 'like', '%' . strtolower($firstWord) . '%')->get();
 
         if ($donations->isEmpty()) {
             return response()->json(['message' => 'no donations found with this name'], 404);
@@ -126,7 +127,7 @@ class DonationController extends Controller
 
     public function getByCategory($category)
     {
-        $donations = Donation::where('category', '=', $category)->get();
+        $donations = DonationModel::where('category', '=', $category)->get();
 
         if ($donations->isEmpty()) {
             return response()->json(['message'=> 'no donations found with this category'],404);
@@ -137,7 +138,7 @@ class DonationController extends Controller
 
     public function getByLocation($location)
     {
-        $donations = Donation::where('location', '=', $location)->get();
+        $donations = DonationModel::where('location', '=', $location)->get();
 
         if ($donations->isEmpty()) {
             return response()->json(['message'=> 'no donations found for this location'],404);
@@ -149,7 +150,7 @@ class DonationController extends Controller
     public function getByMyLocation()
     {
         $user = auth()->user();
-        $donations = Donation::where('location', '=', $user->location)->where('user_id', '!=', $user->id)->get();
+        $donations = DonationModel::where('location', '=', $user->location)->where('user_id', '!=', $user->id)->get();
 
         if ($donations->isEmpty()) {
             return response()->json(['message'=> 'no donations found for your location'],404);
@@ -161,7 +162,7 @@ class DonationController extends Controller
     public function getMyDonations()
     {
         $user = auth()->user();
-        $donations = Donation::where('user_id', '=', $user->id)->get();
+        $donations = DonationModel::where('user_id', '=', $user->id)->get();
 
         if ($donations->isEmpty()) {
             return response()->json(['message' => 'donations not found'], 404);

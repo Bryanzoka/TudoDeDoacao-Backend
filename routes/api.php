@@ -28,9 +28,9 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('/messages', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);
 
-    Route::post('/donations/pending/{id}', [PendingDonationController::class, 'setPending']);
-    // Route::post('/donations/pending/{donation}', [FavoriteController::class, 'favorite']);
-    // Route::delete('/donations/pending/{donation}', [FavoriteController::class, 'unfavorite']);
+    // Route::post('/donations/pending', [PendingDonationController::class, 'setPending']);
+    Route::post('/donations/pending', [PendingDonationController::class, 'store']);
+    Route::delete('/donations/pending', [PendingDonationController::class, 'delete']);
 
     Route::get('/donations/accepted{id}', []);
     Route::post('/donations/accepted', []);

@@ -7,16 +7,12 @@ use Illuminate\Http\UploadedFile;
 class CreateDonationDto
 {
     public int $userId;
-<<<<<<< Updated upstream
     public int $authId;
     public string $name;
     public ?string $description;
     public ?string $category;
     public ?UploadedFile $image;
     public string $location;
-=======
-
->>>>>>> Stashed changes
 
     private function __construct(int $userId, int $authId, string $name, ?string $description, ?string $category, ?UploadedFile $image, string $location)
     {
