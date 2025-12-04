@@ -11,7 +11,6 @@ use App\Application\Dtos\Donations\UpdateDonationDto;
 use App\Application\UseCases\Donations\CreateDonation;
 use App\Application\UseCases\Donations\GetById;
 use App\Application\UseCases\Donations\GetByUserId;
-use App\Domain\Models\Donation;
 use App\Application\UseCases\Donations\GetAll;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Donations\DonationStoreRequest;
@@ -110,64 +109,6 @@ class DonationController extends Controller
         } catch (Exception $ex) {
             return response()->json($ex->getMessage(), $ex->getCode());
         }
-    }
-
-    public function getByName($name)
-    {
-        $firstWord = explode(' ', $name)[0];
-        $donations = Donation::where('search_name', 'like', '%' . strtolower($firstWord) . '%')->get();
-
-        if ($donations->isEmpty()) {
-            return response()->json(['message' => 'no donations found with this name'], 404);
-        }
-
-        return DonationResource::collection($donations);
-    }
-
-    public function getByCategory($category)
-    {
-        $donations = Donation::where('category', '=', $category)->get();
-
-        if ($donations->isEmpty()) {
-            return response()->json(['message'=> 'no donations found with this category'],404);
-        }
-
-        return DonationResource::collection($donations);
-    }
-
-    public function getByLocation($location)
-    {
-        $donations = Donation::where('location', '=', $location)->get();
-
-        if ($donations->isEmpty()) {
-            return response()->json(['message'=> 'no donations found for this location'],404);
-        }
-
-        return DonationResource::collection($donations);
-    }
-
-    public function getByMyLocation()
-    {
-        $user = auth()->user();
-        $donations = Donation::where('location', '=', $user->location)->where('user_id', '!=', $user->id)->get();
-
-        if ($donations->isEmpty()) {
-            return response()->json(['message'=> 'no donations found for your location'],404);
-        }
-
-        return DonationResource::collection($donations);
-    }
-
-    public function getMyDonations()
-    {
-        $user = auth()->user();
-        $donations = Donation::where('user_id', '=', $user->id)->get();
-
-        if ($donations->isEmpty()) {
-            return response()->json(['message' => 'donations not found'], 404);
-        }
-
-        return DonationResource::collection($donations);
     }
     
     public function destroy(int $id, Delete $useCase)
