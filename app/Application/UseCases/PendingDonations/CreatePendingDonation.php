@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Application\UseCases\Donations;
+namespace App\Application\UseCases\PendingDonations;
 
 use App\Domain\Entities\PendingDonation;
 use App\Domain\Repositories\IPendingDonationRepository;
 use App\Domain\Repositories\IUserRepository;
-use CreatePendingDonationDto;
+use App\Application\Dtos\Donations\CreatePendingDonationDto;
 use Exception;
 
 class CreatePendingDonation
@@ -19,15 +19,15 @@ class CreatePendingDonation
         $this->userRepository = $userRepository;
     }
 
-        public function handle(CreatePendingDonationDto $dto): int
-        {
+    public function handle(CreatePendingDonationDto $dto): int
+    {
 
-            if (!$this->userRepository->getById($dto->userId)) {
-                throw new Exception('user does not exist', 400);
-            }
-
-            $pendingDonation = PendingDonation::create($dto->donationId, $dto->userId);
-
-            return $this->pendingDonationRepository->create($pendingDonation);
+        if (!$this->userRepository->getById($dto->userId)) {
+            throw new Exception('user does not exist', 400);
         }
+
+        $pendingDonation = PendingDonation::create($dto->userId, $dto->donationId);
+
+        return $this->pendingDonationRepository->create($pendingDonation);
+    }
 }

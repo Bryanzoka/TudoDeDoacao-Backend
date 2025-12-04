@@ -23,6 +23,8 @@ Route::apiResource('/donations', DonationController::class)->except([
 
 Route::middleware('jwt.auth')->group(function () {
     Route::get('/users/{id}/donations', [DonationController::class, 'getByUser']);
+    Route::get('/users/{userId}/pending', [PendingDonationController::class, 'GetUserPendingDonations']);
+    Route::get('/users/{userId}/received-pendings', [PendingDonationController::class, 'getPendingsReceived']);
     Route::get('/donations', [DonationController::class, 'getFiltered']);
 
     Route::get('/messages', [MessageController::class, 'index']);

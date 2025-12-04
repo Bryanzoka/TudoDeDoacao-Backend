@@ -1,10 +1,12 @@
 <?php
 
+namespace App\Application\Dtos\Donations;
+
 class CreatePendingDonationDto
 {
     public int $userId;
     public int $donationId;
-    
+
     private function __construct(int $userId, int $donationId)
     {
         $this->userId = $userId;
@@ -15,5 +17,4 @@ class CreatePendingDonationDto
     {
         return new self($userId, $donationId);
     }
-
 }

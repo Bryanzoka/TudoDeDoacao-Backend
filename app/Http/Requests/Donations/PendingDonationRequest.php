@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Donations;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,8 +22,8 @@ class PendingDonationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "userId" => ["required", "integer", "exists:users, id"],
-            "donationId" => ["required", "integer", "exists:donations, id"] 
+            "user_id" => ["required", "integer", "exists:users,id"],
+            "donation_id" => ["required", "integer", "exists:donations,id"]
         ];
     }
 }
