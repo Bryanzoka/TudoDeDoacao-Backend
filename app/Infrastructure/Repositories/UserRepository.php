@@ -10,7 +10,7 @@ class UserRepository implements IUserRepository
 {
     public function getAll(): array
     {
-        return UserModel::all()->map(fn($m) => User::restore(                
+        return UserModel::all()->map(fn($m) => User::restore(
             $m->id,
             $m->name,
             $m->email,
@@ -24,23 +24,23 @@ class UserRepository implements IUserRepository
 
     public function getById(int $id): ?User
     {
-        $user = UserModel::where('id', '=', $id)->first();
-
+        $user = UserModel::where('id', $id)->first();
         if (!$user) {
             return null;
         }
 
-        return User::restore($user->id,
-        $user->name, 
-        $user->email, 
-        $user->phone, 
-        $user->profile_image, 
-        $user->password, 
-        $user->location, 
-        $user->role
+        return User::restore(
+            $user->id,
+            $user->name,
+            $user->email,
+            $user->phone,
+            $user->profile_image,
+            $user->password,
+            $user->location,
+            $user->role
         );
     }
-    
+
     public function getByEmail(string $email): ?User
     {
         $user = UserModel::where('email', '=', $email)->first();
@@ -48,15 +48,16 @@ class UserRepository implements IUserRepository
         if (!$user) {
             return null;
         }
-        
-        return User::restore($user->id, 
-        $user->name, 
-        $user->email, 
-        $user->phone, 
-        $user->profile_image, 
-        $user->password, 
-        $user->location, 
-        $user->role
+
+        return User::restore(
+            $user->id,
+            $user->name,
+            $user->email,
+            $user->phone,
+            $user->profile_image,
+            $user->password,
+            $user->location,
+            $user->role
         );
     }
 
