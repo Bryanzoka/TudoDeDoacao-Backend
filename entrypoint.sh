@@ -3,6 +3,11 @@ set -e
 
 cd /var/www/html
 
+echo "📄 Setting up environment file..."
+if [ ! -f .env ]; then
+    cp .env.example .env
+fi
+
 echo "🔧 Running Laravel setup..."
 
 if [ -z "$APP_KEY" ]; then
