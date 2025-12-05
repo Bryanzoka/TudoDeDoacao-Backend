@@ -11,7 +11,7 @@ Route::get('users', [UserController::class, 'index']);
 Route::get('users/{id}', [UserController::class, 'show']);
 Route::post('users', [UserController::class, 'store']);
 
-Route::middleware(['jwt.auth', 'role'])->group(function () {
+Route::middleware(['jwt.auth', 'role'])->group(function() {
     Route::patch('users/{id}', [UserController::class, 'update']);
     Route::delete('users/{id}', [UserController::class, 'destroy']);
 });
