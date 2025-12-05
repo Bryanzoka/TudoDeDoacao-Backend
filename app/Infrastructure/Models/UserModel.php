@@ -5,8 +5,10 @@ namespace App\Infrastructure\Models;
 use App\Infrastructure\Models\DonationModel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Infrastructure\Models\PendingDonationModel;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class UserModel extends Authenticatable implements JWTSubject, MustVerifyEmail
@@ -14,7 +16,7 @@ class UserModel extends Authenticatable implements JWTSubject, MustVerifyEmail
     use HasFactory, Notifiable;
 
     protected $table = 'users';
-
+    protected $primaryKey = 'id';
     protected $fillable = [
         'name',
         'email',
@@ -37,6 +39,11 @@ class UserModel extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function favoriteDonations()
     {
         return $this->belongsToMany(DonationModel::class, 'favorites')->withTimestamps();
+    }
+
+    public function PendingDonatinos(): HasMany
+    {
+        return $this->hasMany(PendingDonationModel::class, 'user_id');
     }
 
     public function getJWTIdentifier()
