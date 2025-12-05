@@ -55,6 +55,11 @@ class AuthController extends Controller
             $useCase->handle(VerificationCodeDto::create($data['email']));
             return response()->json(null, 204);
         } catch (Exception $ex) {
+
+            \Log::error("EMAIL ERROR: " . $ex->getMessage(), [
+                'trace' => $ex->getTraceAsString()
+            ]);
+
             return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
