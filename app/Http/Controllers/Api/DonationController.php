@@ -17,7 +17,6 @@ use App\Http\Requests\Donations\DonationStoreRequest;
 use App\Http\Requests\Donations\DonationUpdateRequest;
 use App\Http\Requests\Donations\GetFilteredRequest;
 use App\Http\Resources\DonationResource;
-use App\Infrastructure\Models\DonationModel;
 use Exception;
 
 class DonationController extends Controller

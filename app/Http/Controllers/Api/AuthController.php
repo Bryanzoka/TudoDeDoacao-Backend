@@ -26,9 +26,7 @@ class AuthController extends Controller
 
             return response()->json(['access_token' => $tokens['access_token'], 'refresh_token' => $tokens['refresh_token']], 200);
         } catch (Exception $ex) {
-            return response()->json([
-               'error' => $ex->getMessage()
-            ], 400);
+            return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
 
@@ -39,9 +37,7 @@ class AuthController extends Controller
             $tokens = $useCase->handle($data['token']);
             return response()->json(['access_token' => $tokens['access_token'], 'refresh_token' => $tokens['refresh_token']], 200);
         } catch (Exception $ex) {
-            return response()->json([
-                'error' => $ex->getMessage()
-             ], 400);
+            return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
 
@@ -59,9 +55,7 @@ class AuthController extends Controller
             $useCase->handle(VerificationCodeDto::create($data['email']));
             return response()->json(null, 204);
         } catch (Exception $ex) {
-            return response()->json([
-                'error' => $ex->getMessage()
-             ], 400);
+            return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
 }
