@@ -11,6 +11,10 @@ class VerificationCodeModel extends Model
 
     protected $table = 'verification_codes';
 
+    protected $primaryKey = 'email';
+    
+    public $incrementing = false;
+
     protected $fillable = [
         'email',
         'code',
