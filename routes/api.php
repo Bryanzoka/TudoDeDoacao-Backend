@@ -43,3 +43,17 @@ Route::middleware('jwt.auth')->group(function () {
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('auth/refresh', [AuthController::class, 'refresh']);
 Route::post('/auth/request-verification-code', [AuthController::class, 'requestCode']);
+
+Route::get('debug/logs', function () {
+    $logFilePath = storage_path('logs/laravel.log');
+
+    if (!File::exists($logFilePath)) {
+        return response('Log file not found at: ' . $logFilePath, 404)
+               ->header('Content-Type', 'text/plain');
+    }
+
+    $logContents = File::get($logFilePath);
+
+    return response($logContents, 200)
+           ->header('Content-Type', 'text/plain');
+});
