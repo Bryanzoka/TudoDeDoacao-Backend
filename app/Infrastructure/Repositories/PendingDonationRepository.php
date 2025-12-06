@@ -21,7 +21,7 @@ class PendingDonationRepository implements IPendingDonationRepository
             //    tem o campo 'user_id' (o criador) igual ao $donorId
             ->whereHas('donation', function ($query) use ($donorId) {
                 // Aqui estamos dentro da tabela 'donations'
-                $query->where('requester_id', $donorId);
+                $query->where('user_id', $donorId);
             })->get()->toArray();
     }
 
