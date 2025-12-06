@@ -60,7 +60,7 @@ class AuthController extends Controller
                 'trace' => $ex->getTraceAsString()
             ]);
 
-            return response()->json($ex->getMessage(), $ex->getCode());
+            return response()->json($ex->getMessage(), 400);
         }
     }
 }
