@@ -43,3 +43,7 @@ Route::middleware('jwt.auth')->group(function () {
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('auth/refresh', [AuthController::class, 'refresh']);
 Route::post('/auth/request-verification-code', [AuthController::class, 'requestCode']);
+
+Route::get('/debug/logs', function () {
+    return response()->file(storage_path('logs/laravel.log'));
+});
