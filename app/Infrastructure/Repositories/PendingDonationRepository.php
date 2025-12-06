@@ -21,7 +21,7 @@ class PendingDonationRepository implements IPendingDonationRepository
             //    tem o campo 'user_id' (o criador) igual ao $donorId
             ->whereHas('donation', function ($query) use ($donorId) {
                 // Aqui estamos dentro da tabela 'donations'
-                $query->where('requesterId', $donorId);
+                $query->where('requester_id', $donorId);
             })->get()->toArray();
     }
 
@@ -33,7 +33,7 @@ class PendingDonationRepository implements IPendingDonationRepository
     public function exists(int $donationId, string $requesterId)
     {
         return PendingDonationModel::where('donation_id', $donationId)
-            ->where('requester_user_id', $requesterId)
+            ->where('requester_id', $requesterId)
             ->exists();
     }
 
@@ -52,12 +52,12 @@ class PendingDonationRepository implements IPendingDonationRepository
 
     public function deleteByDonationAndRequester(int $donationId, int $requesterId)
     {
-         PendingDonationModel::where('donation_id', $donationId)
+        PendingDonationModel::where('donation_id', $donationId)
             ->where('requester_id', $requesterId)
             ->delete();
     }
 
-     public function countByDonation(int $donationId): int
+    public function countByDonation(int $donationId): int
     {
         return PendingDonationModel::where('donation_id', $donationId)->count();
     }
