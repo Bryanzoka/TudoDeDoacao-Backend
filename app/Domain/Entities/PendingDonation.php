@@ -4,29 +4,23 @@ namespace App\Domain\Entities;
 
 class PendingDonation
 {
-    private int $userId;
+    private int $requesterId;
     private int $donationId;
 
-    private function __construct(int $userId, int $donationId)
+    private function __construct(int $requesterId, int $donationId)
     {
-        $this->userId = $userId;
+        $this->requesterId = $requesterId;
         $this->donationId = $donationId;
     }
 
-    public static function create(int $userId, int $donationId)
+    public static function create(int $requesterId, int $donationId)
     {
-        return new self($userId, $donationId);
+        return new self($requesterId, $donationId);
     }
 
-    public function update(int $userId, int $donationId)
+    public static function restore(int $requesterId, int $donationId)
     {
-        $this->userId = $userId;
-        $this->donationId = $donationId;
-    }
-
-    public static function restore(int $userId, int $donationId)
-    {
-        return new self($userId, $donationId);
+        return new self($requesterId, $donationId);
     }
 
     public function getDonationId()
@@ -34,8 +28,8 @@ class PendingDonation
         return $this->donationId;
     }
 
-    public function getUserId()
+    public function getRequesterId()
     {
-        return $this->userId;
+        return $this->requesterId;
     }
 }

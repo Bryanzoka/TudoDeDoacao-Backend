@@ -141,6 +141,13 @@ class DonationRepository implements IDonationRepository
         ]);
     }
 
+    public function updateStatus(int $donationId, string $status): void
+    {
+        DonationModel::where('id', '=', $donationId)->update([
+            'status' => $status
+        ]);
+    }
+
     public function delete(Donation $donation): void
     {
         DonationModel::where('id', '=', $donation->getId())->delete();

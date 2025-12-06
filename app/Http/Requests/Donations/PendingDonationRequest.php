@@ -22,7 +22,7 @@ class PendingDonationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => ["required", "integer", "exists:users,id"],
+            "requester_id" => ["required", "integer", "exists:users,id"],
             "donation_id" => ["required", "integer", "exists:donations,id"]
         ];
     }

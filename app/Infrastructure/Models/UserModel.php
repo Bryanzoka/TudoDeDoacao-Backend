@@ -43,7 +43,7 @@ class UserModel extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function PendingDonatinos(): HasMany
     {
-        return $this->hasMany(PendingDonationModel::class, 'user_id');
+        return $this->hasMany(PendingDonationModel::class, 'requester_id');
     }
 
     public function getJWTIdentifier()

@@ -19,7 +19,7 @@ use Exception;
 class AuthController extends Controller
 {
     public function login(LoginRequest $request, Login $useCase)
-    {   
+    {
         $data = $request->validated();
         try {
             $tokens = $useCase->handle(LoginDto::create($data['email'], $data['password']));
@@ -46,10 +46,10 @@ class AuthController extends Controller
         $data = $request->validated();
         $useCase->handle(LogoutDto::create($data['token']));
         return response()->json(null, 204);
-    }   
+    }
 
     public function requestCode(VerificationCodeRequest $request, SendVerificationCode $useCase)
-    {   
+    {
         $data = $request->validated();
         try {
             $useCase->handle(VerificationCodeDto::create($data['email']));
