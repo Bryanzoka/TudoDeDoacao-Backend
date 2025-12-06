@@ -21,25 +21,49 @@ class PendingDonationRepository implements IPendingDonationRepository
             //    tem o campo 'user_id' (o criador) igual ao $donorId
             ->whereHas('donation', function ($query) use ($donorId) {
                 // Aqui estamos dentro da tabela 'donations'
-                $query->where('user_id', $donorId);
+                $query->where('requesterId', $donorId);
             })->get()->toArray();
     }
 
-    public function getPendingDonationsByUserId(int $userId): array
+    public function getPendingDonationsByUserId(int $requesterId): array
     {
-        return PendingDonationModel::query()->where('user_id', $userId)->with('donation')->with('user')->get()->toArray();
+        return PendingDonationModel::query()->where('requester_id', $requesterId)->with('donation')->with('user')->get()->toArray();
+    }
+
+    public function exists(int $donationId, string $requesterId)
+    {
+        return PendingDonationModel::where('donation_id', $donationId)
+            ->where('requester_user_id', $requesterId)
+            ->exists();
     }
 
     public function create(PendingDonation $pendingDonation): int
     {
         return PendingDonationModel::create([
             'donation_id' => $pendingDonation->getDonationId(),
-            'user_id' => $pendingDonation->getUserId(),
+            'requester_id' => $pendingDonation->getRequesterId(),
         ])->id;
+    }
+
+    public function deleteAllByDonation(int $donationId)
+    {
+        PendingDonationModel::where('donation_id', $donationId)->delete();
+    }
+
+    public function deleteByDonationAndRequester(int $donationId, int $requesterId)
+    {
+         PendingDonationModel::where('donation_id', $donationId)
+            ->where('requester_id', $requesterId)
+            ->delete();
+    }
+
+     public function countByDonation(int $donationId): int
+    {
+        return PendingDonationModel::where('donation_id', $donationId)->count();
     }
 
     public function delete(PendingDonation $pendingDonation): void
     {
-        PendingDonationModel::where('user_id', '=', $pendingDonation->getUserId())->delete();
+        PendingDonationModel::where('user_id', '=', $pendingDonation->getRequesterId())->delete();
     }
 }

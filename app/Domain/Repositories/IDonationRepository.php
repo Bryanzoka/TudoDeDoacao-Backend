@@ -13,5 +13,6 @@ interface IDonationRepository
     public function getFiltered(?string $name, ?string $category, ?string $location, ?string $status, int $limit = 30, int $offset = 0): array;
     public function create(Donation $donation): int;
     public function update(Donation $donation): void;
+    public function updateStatus(int $donationId, string $status): void;
     public function delete(Donation $donation): void;
 }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pending_donations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('requester_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('donation_id')->constrained()->onDelete('cascade');
 
             $table->timestamps();

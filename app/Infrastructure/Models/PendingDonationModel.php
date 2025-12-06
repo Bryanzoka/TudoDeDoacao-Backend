@@ -13,13 +13,13 @@ class PendingDonationModel extends Model
     protected $table = 'pending_donations';
 
     protected $fillable = [
-        'user_id',
+        'requester_id',
         'donation_id',
     ];
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(UserModel::class, 'user_id');
+        return $this->belongsTo(UserModel::class, 'requester_id');
     }
 
     public function donation(): BelongsTo
