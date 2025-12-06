@@ -18,8 +18,10 @@ if [ -z "$JWT_SECRET" ]; then
     php artisan jwt:secret --force
 fi
 
+MIGRATION_PATH="database/migrations/2025_10_14_162350_create_verification_codes_table.php"
+
 echo "Attempting to reset verification_codes table..."
-php artisan migrate:rollback --path=/database/migrations/2025_01_01_create_verification_codes_table.php || true
+php artisan migrate:rollback --path=$MIGRATION_PATH --force || true
 
 php artisan migrate --force
 
