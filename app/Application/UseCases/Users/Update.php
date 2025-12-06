@@ -30,6 +30,10 @@ class Update
             $imagePath = $dto->profileImage->store('users', 'public');
         }
 
+        if ($dto->password) {
+            $dto->password = password_hash($dto->password, PASSWORD_BCRYPT);
+        }
+
         $user->update(
             $dto->name ?? $user->getName(),
             $dto->email ?? $user->getEmail(),

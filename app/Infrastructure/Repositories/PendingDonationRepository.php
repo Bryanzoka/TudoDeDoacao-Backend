@@ -38,8 +38,13 @@ class PendingDonationRepository implements IPendingDonationRepository
         ])->id;
     }
 
+    // App\Infrastructure\Repositories\PendingDonationRepository.php
+    // Implementação Correta do método delete
     public function delete(PendingDonation $pendingDonation): void
     {
-        PendingDonationModel::where('user_id', '=', $pendingDonation->getUserId())->delete();
+        PendingDonationModel::query()
+            ->where('donation_id', $pendingDonation->getDonationId())
+            ->where('user_id', $pendingDonation->getUserId())
+            ->delete();
     }
 }

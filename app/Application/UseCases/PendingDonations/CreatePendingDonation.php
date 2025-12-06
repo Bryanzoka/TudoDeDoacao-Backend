@@ -6,6 +6,7 @@ use App\Domain\Entities\PendingDonation;
 use App\Domain\Repositories\IPendingDonationRepository;
 use App\Domain\Repositories\IUserRepository;
 use App\Application\Dtos\Donations\CreatePendingDonationDto;
+use App\Application\Dtos\Donations\RemoveSpecificPendingDonationDto;
 use Exception;
 
 class CreatePendingDonation
@@ -19,7 +20,7 @@ class CreatePendingDonation
         $this->userRepository = $userRepository;
     }
 
-    public function handle(CreatePendingDonationDto $dto): int
+    public function handle(RemoveSpecificPendingDonationDto $dto): int
     {
 
         if (!$this->userRepository->getById($dto->userId)) {
