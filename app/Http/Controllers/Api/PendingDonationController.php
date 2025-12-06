@@ -42,6 +42,7 @@ class PendingDonationController extends Controller
             $useCase->handle($dto);
             return response()->json(['success' => true, 'message' => "Pedido de doação aceito com sucesso!"], 200);
         } catch (\Exception $ex) {
+            \Log::error("ERRO EMAIL REQUEST CODE: " . $ex->getMessage(), ['trace' => $ex->getTraceAsString()]);
             return response()->json([
                 'success' => false,
                 'error' => $ex->getMessage()
@@ -61,6 +62,7 @@ class PendingDonationController extends Controller
 
             return response()->json(['id' => $id], 201);
         } catch (Exception $ex) {
+            \Log::error("ERRO EMAIL REQUEST CODE: " . $ex->getMessage(), ['trace' => $ex->getTraceAsString()]);
             return response()->json($ex->getMessage(), $ex->getCode());
         }
     }
@@ -81,6 +83,7 @@ class PendingDonationController extends Controller
                 'message' => 'Pedido de doação rejeitado com sucesso!'
             ], 200);
         } catch (\Exception $e) {
+            \Log::error("ERRO EMAIL REQUEST CODE: " . $ex->getMessage(), ['trace' => $ex->getTraceAsString()]);
             return response()->json([
                 'success' => false,
                 'error' => $e->getMessage()
