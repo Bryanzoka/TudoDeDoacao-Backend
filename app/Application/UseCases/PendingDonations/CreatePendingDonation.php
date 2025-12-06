@@ -24,9 +24,8 @@ class CreatePendingDonation
 
     public function handle(CreatePendingDonationDto $dto): int
     {
-        if($this->pendingDonationRepository->exists($dto->donationId, $dto->requesterId))
-        {
-             throw new Exception('Você já solicitou esta doação');
+        if ($this->pendingDonationRepository->exists($dto->donationId, $dto->requesterId)) {
+            throw new Exception('Você já solicitou esta doação', 400);
         }
 
         $pendingDonation = PendingDonation::create($dto->requesterId, $dto->donationId);

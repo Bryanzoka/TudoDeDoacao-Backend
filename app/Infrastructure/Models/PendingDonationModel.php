@@ -12,6 +12,8 @@ class PendingDonationModel extends Model
 
     protected $table = 'pending_donations';
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'requester_id',
         'donation_id',
